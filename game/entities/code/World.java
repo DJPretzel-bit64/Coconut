@@ -86,6 +86,11 @@ public class World extends BasicEntity {
     @Override
     public void render(Renderer renderer) {
         if(!Collective.wireframe) {
+            for(int j = -Engine.height / 16 - 2; j < Engine.height / 16 + 2; j++) {
+                for(int i = -Engine.width / 16 - 2; i < Engine.width / 16 + 2; i++) {
+                    renderer.draw(new Vec2(i * 32, j * 32).plus(Collective.playerPos.divide(3).mod(32)), new Vec2(32, 32), dark);
+                }
+            }
             for(int j = 0; j < worldHeight; j++) {
                 for(int i = 0; i < worldWidth; i++) {
                     if(rawWorld[i][j] == 'g')
@@ -133,13 +138,12 @@ public class World extends BasicEntity {
     private void setWorldHitbox() {
         for(int j = 0; j < worldHeight; j++) {
             for(int i = 0; i < worldWidth; i++) {
-                char character = rawWorld[i][j];
-                if(character == 'g')
-                    hitboxes.add(new Hitbox(new Vec2(i * 32 - 16, j * 32 - 16), new Vec2(32, 32)));
-                else if(character == 'e')
-                    Engine.addToEntityList(new Enemy(new Vec2(i * 32 - 16, j * 32 - 16)));
-                else if(character == 'b')
-                    Engine.addToEntityList(new Bean(new Vec2(i * 32 - 16, j * 32 - 16)));
+				switch (rawWorld[i][j]) {
+					case 'e' -> Engine.addToEntityList(new Enemy(new Vec2(i * 32 - 16, j * 32 - 16)));
+					case 'b' -> Engine.addToEntityList(new Bean(new Vec2(i * 32 - 16, j * 32 - 16)));
+					case 'g' -> hitboxes.add(new Hitbox(new Vec2(i * 32 - 16, j * 32 - 16), new Vec2(32, 32)));
+					default -> {}
+				}
             }
         }
     }

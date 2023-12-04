@@ -1,11 +1,14 @@
 package engine;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+
+import static engine.Engine.height;
+import static engine.Engine.width;
 
 public class Renderer {
     Graphics g;
-    int width, height;
     double scale;
     Vec2 cameraPos;
 
@@ -14,10 +17,8 @@ public class Renderer {
         this.cameraPos = cameraPos;
     }
 
-    public void update(Graphics g, int width, int height) {
+    public void update(Graphics g) {
         this.g = g;
-        this.width = width;
-        this.height = height;
     }
 
     public void draw(Vec2 pos, Vec2 size, BufferedImage texture) {

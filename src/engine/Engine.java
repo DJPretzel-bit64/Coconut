@@ -19,10 +19,10 @@ import java.util.List;
 public class Engine extends Canvas {
     private final JFrame frame;
     private boolean running = false;
-    private int width;
-    private int height;
+    public static int width;
+    public static int height;
     private final String title;
-    private final double fps;
+    private final double tps;
     private final String entities;
     private final String boxes;
     private final String cameraAttach;
@@ -33,6 +33,7 @@ public class Engine extends Canvas {
     private static final ArrayList<Entity> removeList = new ArrayList<>();
     private static final ArrayList<Entity> addList = new ArrayList<>();
     private Vec2 cameraPos = new Vec2();
+    private final int numLayers;
 
     public static void main(String[] args) {
         new Engine();
@@ -50,12 +51,13 @@ public class Engine extends Canvas {
         width = Integer.parseInt(properties.getProperty("width", "800"));
         height = Integer.parseInt(properties.getProperty("height", "600"));
         title = properties.getProperty("title", "A Game");
-        fps = Double.parseDouble(properties.getProperty("fps", "60"));
+        tps = Double.parseDouble(properties.getProperty("tps", "60"));
 //        fps = Math.random() * (144 - 60) + 60;
         double scale = Integer.parseInt(properties.getProperty("scale", "1"));
         entities = properties.getProperty("entities", "/");
         boxes = properties.getProperty("boxes", "/");
         cameraAttach = properties.getProperty("camera_attach", "");
+        numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));
 
         loadEntities();
         loadBoxes();
@@ -103,7 +105,7 @@ public class Engine extends Canvas {
                         entity.setCollidesWith(new ArrayList<>(Arrays.asList(properties.getProperty("collides_with", "").split(","))));
                         if(Objects.equals(cameraAttach, properties.getProperty("name")))
                             cameraPos = entity.getPos();
-                        entity.setPriority(Integer.parseInt(properties.getProperty("priority", "-1")));
+                        entity.setLayer(Integer.parseInt(properties.getProperty("layer", "-1")));
                         entity.setIndex(entityList.size());
                         entityList.add(entity);
                     } catch(Exception e) {
@@ -112,10 +114,6 @@ public class Engine extends Canvas {
                     }
                 }
             }
-
-            for(Entity entity : entityList)
-                if(entity.getPriority() != -1 && entity.getPriority() < entityList.size())
-                    Collections.swap(entityList, entity.getPriority(), entity.getIndex());
         } catch(IOException e) {
             System.out.println("Folder: \"" + entities + "\" does not exist.");
         }
@@ -182,16 +180,16 @@ public class Engine extends Canvas {
         while(running) {
             now = System.nanoTime();
             delta = (now - lastTime) / 1_000_000_000.;
-            if(delta >= 1 / fps) {
-                lastTime += (int)(1_000_000_000 / fps);
-                update(1 / fps);
-                sps += 1 / fps;
+            if(delta >= 1 / tps) {
+                lastTime += (int)(1_000_000_000 / tps);
+                update(1 / tps);
+                sps += 1 / tps;
             }
             frames ++;
             render();
             if (System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;
-                frame.setTitle(title + " | " + frames + " fps" + " | " + (sps - sps % 0.001) + " sps");
+                frame.setTitle(title + " | " + frames + " fps" + " | " + Math.round(sps * tps) + " tps");
                 frames = 0;
                 sps = 0;
             }
@@ -209,10 +207,13 @@ public class Engine extends Canvas {
         Graphics g = bs.getDrawGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, width, height);
-        renderer.update(g, width, height);
 
-        for(Entity entity : entityList)
-            entity.render(renderer);
+        renderer.update(g);
+
+        for(int i = 0; i < numLayers; i++)
+            for(Entity entity : entityList)
+                if(entity.getLayer() == i)
+                    entity.render(renderer);
 
         g.dispose();
         bs.show();

@@ -3,7 +3,6 @@ package game.entities.code;
 import engine.*;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.Objects;
 
 import static game.entities.code.Collective.aniIndex;
@@ -17,10 +16,11 @@ public class Player extends BasicEntity {
     boolean canJump = true;
     String direction = "left";
     int maxHealth = 8;
-    int health = maxHealth;
+    int health = 1;
     int aniNum = 0;
     int aniLength = 4;
     int contentIndex = -1;
+    int score = 0;
     BufferedImage[] idleAni = new BufferedImage[aniLength];
     BufferedImage[] leftAni = new BufferedImage[aniLength];
     BufferedImage[] rightAni = new BufferedImage[aniLength];
@@ -29,6 +29,10 @@ public class Player extends BasicEntity {
     BufferedImage[] leftFallAni = new BufferedImage[aniLength];
     BufferedImage[] rightFallAni = new BufferedImage[aniLength];
     BufferedImage[] healthAni = new BufferedImage[maxHealth + 1];
+
+    public Player() {
+        Collective.playerPos = pos;
+    }
 
     @Override
     public void setTexture(BufferedImage texture) {
@@ -48,11 +52,12 @@ public class Player extends BasicEntity {
 
     @Override
     public void update(Input input, double delta) {
+        Collective.playerPos = pos;
+
         double speed = this.speed * delta;
         double jumpSpeed = this.jumpSpeed * delta;
         int aniSpeed = (int) (0.1 / delta);
         if(input.up && canJump) {
-            direction = "up";
             velocity.y = jumpSpeed;
             canJump = false;
         }
@@ -68,13 +73,31 @@ public class Player extends BasicEntity {
         }
         else {
             velocity.x = 0;
-            direction = Objects.equals(direction, "up") ? "up" : "idle";
+            direction = velocity.y == 0 ? "idle" : "up";
         }
         velocity = velocity.plus(acceleration.times(delta * delta));
         if(lastPos.y != pos.y)
             canJump = false;
         lastPos = new Vec2(pos);
         lastVelocity = new Vec2(velocity);
+
+        if(contains("Enemy")) {
+            health--;
+            score++;
+            Engine.removeFromEntityList(lastCollision.get(contentIndex));
+            if(health == 0) {
+                System.out.println("You finished with " + score + " points!");
+                System.exit(0);
+            }
+        }
+
+        if(contains("Bean")) {
+            if(health == maxHealth)
+                score++;
+            else
+                health++;
+            Engine.removeFromEntityList(lastCollision.get(contentIndex));
+        }
 
         aniNum++;
         if(aniNum >= aniSpeed) {
@@ -105,10 +128,10 @@ public class Player extends BasicEntity {
                 renderer.draw(hitbox);
     }
 
-    private boolean contains(List<Entity> lastCollision, String content) {
+    private boolean contains(String name) {
         for(int i = 0; i < lastCollision.size(); i++) {
             Entity entity = lastCollision.get(i);
-            if (Objects.equals(entity.getName(), content)) {
+            if (Objects.equals(entity.getName(), name)) {
                 contentIndex = i;
                 return true;
             }

@@ -15,6 +15,7 @@ public class Bean extends BasicEntity {
 	BufferedImage[] beanAni = new BufferedImage[aniLength];
 
 	public Bean(Vec2 pos) {
+		this.layer = 2;
 		this.pos = pos.plus(new Vec2(16, 16));
 		this.hitboxes.add(new Hitbox(pos, new Vec2(32, 32)));
 		this.name = "Bean";

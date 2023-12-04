@@ -14,7 +14,7 @@ public class BasicEntity implements Entity, Serializable {
     public Vec2 velocity = new Vec2();
     public List<Entity> lastCollision;
     public List<String> collidesWith = new ArrayList<>();
-    public int priority = -1;
+    public int layer = -1;
     public int index;
 
     @Override
@@ -98,13 +98,13 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public int getPriority() {
-        return this.priority;
+    public int getLayer() {
+        return this.layer;
     }
 
     @Override
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setLayer(int priority) {
+        this.layer = priority;
     }
 
     @Override
@@ -122,6 +122,6 @@ public class BasicEntity implements Entity, Serializable {
 
     @Override
     public void render(Renderer renderer) {
-        renderer.draw(this.pos, this.size, texture);
+        renderer.draw(this.pos, this.size, this.texture);
     }
 }

@@ -20,8 +20,8 @@ public interface Entity {
     void setCollidesWith(List<String> collidesWith);
     List<Entity> getLastCollision();
     void setLastCollision(List<Entity> lastCollision);
-    int getPriority();
-    void setPriority(int priority);
+    int getLayer();
+    void setLayer(int priority);
     int getIndex();
     void setIndex(int index);
     void update(Input input, double delta);

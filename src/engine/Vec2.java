@@ -35,6 +35,10 @@ public class Vec2 {
         return this.times(1 / s);
     }
 
+    public Vec2 mod(double s) {
+        return new Vec2(this.x % s, this.y % s);
+    }
+
     public Vec2 normal() {
         return this.divide(this.length());
     }

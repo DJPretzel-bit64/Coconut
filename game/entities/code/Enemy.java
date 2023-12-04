@@ -13,6 +13,7 @@ public class Enemy extends BasicEntity {
 	double speed = 100;
 
 	public Enemy(Vec2 pos) {
+		this.layer = 2;
 		this.pos = pos.plus(new Vec2(16, 16));
 		this.hitboxes.add(new Hitbox(pos.plus(new Vec2(4, 0)), new Vec2(24, 32)));
 		this.collidesWith.add("World");
