@@ -22,14 +22,14 @@ public class Engine extends Canvas {
     private int width;
     private int height;
     private final String title;
-    private double fps;
+    private final double fps;
     private final String entities;
     private final String boxes;
     private final String cameraAttach;
     private final Renderer renderer;
     private final Input input = new Input();
     private final Physics physics;
-    private final ArrayList<Entity> entityList = new ArrayList<>();
+    private ArrayList<Entity> entityList = new ArrayList<>();
     private static final ArrayList<Entity> removeList = new ArrayList<>();
     private static final ArrayList<Entity> addList = new ArrayList<>();
     private Vec2 cameraPos = new Vec2();
@@ -102,20 +102,19 @@ public class Engine extends Canvas {
                         entity.setCollidesWith(new ArrayList<>(Arrays.asList(properties.getProperty("collides_with", "").split(","))));
                         if(Objects.equals(cameraAttach, properties.getProperty("name")))
                             cameraPos = entity.getPos();
-                        int priority = Integer.parseInt(properties.getProperty("priority", "-1"));
-                        if(priority != -1) {
-                            Entity intermediate = entityList.get(priority);
-                            entityList.set(priority, entity);
-                            entityList.add(intermediate);
-                        }
-                        else
-                            entityList.add(entity);
+                        entity.setPriority(Integer.parseInt(properties.getProperty("priority", "-1")));
+                        entity.setIndex(entityList.size());
+                        entityList.add(entity);
                     } catch(Exception e) {
                         System.out.println("Error compiling " + properties.getProperty("name") + " class");
                         e.printStackTrace();
                     }
                 }
             }
+
+            for(Entity entity : entityList)
+                if(entity.getPriority() != -1 && entity.getPriority() < entityList.size())
+                    Collections.swap(entityList, entity.getPriority(), entity.getIndex());
         } catch(IOException e) {
             System.out.println("Folder: \"" + entities + "\" does not exist.");
         }
@@ -174,14 +173,17 @@ public class Engine extends Canvas {
 
     public void run() {
         long lastTime = System.nanoTime();
+        long now;
         long timer = System.currentTimeMillis();
         int frames = 0;
         while(running) {
-            render();
-            long now = System.nanoTime();
-            update((now - lastTime) / 1_000_000_000.);
-            lastTime = now;
+            now = System.nanoTime();
+            if((now - lastTime) > 1_000_000_000 / fps) {
+                lastTime = now;
+                update(1 / fps);
+            }
             frames++;
+            render();
             if (System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;
                 frame.setTitle(title + " | " + frames + " fps");
@@ -203,9 +205,8 @@ public class Engine extends Canvas {
         g.fillRect(0, 0, width, height);
         renderer.update(g, width, height);
 
-        for(Entity entity : entityList) {
+        for(Entity entity : entityList)
             entity.render(renderer);
-        }
 
         g.dispose();
         bs.show();
@@ -238,10 +239,10 @@ public class Engine extends Canvas {
     }
 
     private void updateEntityList() {
-        for(Entity entity : removeList) {
+		for(Entity entity : removeList)
             entityList.remove(entity);
-        }
-        entityList.addAll(addList);
+        for(Entity entity : addList)
+            entityList.add(0, entity);
         removeList.clear();
         addList.clear();
     }

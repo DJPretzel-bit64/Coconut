@@ -9,10 +9,11 @@ import java.util.Objects;
 import static game.entities.code.Collective.aniIndex;
 
 public class Player extends BasicEntity {
-    double speed = 100;
-    double jumpSpeed = 100;
+    Vec2 acceleration = new Vec2(0, -800);
+    double speed = 120;
+    double jumpSpeed = 280;
     boolean canJump = true;
-    String direction;
+    String direction = "left";
     int maxHealth = 8;
     int health = maxHealth;
     int aniLength = 4;
@@ -25,10 +26,6 @@ public class Player extends BasicEntity {
     BufferedImage[] leftFallAni = new BufferedImage[aniLength];
     BufferedImage[] rightFallAni = new BufferedImage[aniLength];
     BufferedImage[] healthAni = new BufferedImage[maxHealth + 1];
-
-    public Player() {
-        acceleration = new Vec2(0, -100);
-    }
 
     @Override
     public void setTexture(BufferedImage texture) {
@@ -53,7 +50,6 @@ public class Player extends BasicEntity {
         if(input.up && canJump) {
             direction = "up";
             this.velocity.y = jumpSpeed;
-            System.out.println(this.velocity.y);
             canJump = false;
         }
         if(this.velocity.y == 0)

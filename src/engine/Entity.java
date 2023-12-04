@@ -16,12 +16,14 @@ public interface Entity {
     List<Hitbox> getHitboxes();
     void setVelocity(Vec2 velocity);
     Vec2 getVelocity();
-    void setAcceleration(Vec2 acceleration);
-    Vec2 getAcceleration();
     List<String> getCollidesWith();
     void setCollidesWith(List<String> collidesWith);
     List<Entity> getLastCollision();
     void setLastCollision(List<Entity> lastCollision);
+    int getPriority();
+    void setPriority(int priority);
+    int getIndex();
+    void setIndex(int index);
     void update(Input input, double delta);
     void render(Renderer renderer);
 }

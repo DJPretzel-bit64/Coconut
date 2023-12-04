@@ -12,14 +12,10 @@ public class BasicEntity implements Entity, Serializable {
     public BufferedImage texture;
     public List<Hitbox> hitboxes = new ArrayList<>();
     public Vec2 velocity = new Vec2();
-    public Vec2 acceleration = new Vec2();
     public List<Entity> lastCollision;
     public List<String> collidesWith = new ArrayList<>();
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
+    public int priority = -1;
+    public int index;
 
     @Override
     public String getName() {
@@ -27,8 +23,8 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public void setSize(Vec2 size) {
-        this.size = size;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -37,8 +33,8 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public void setPos(Vec2 pos) {
-        this.pos = pos;
+    public void setSize(Vec2 size) {
+        this.size = size;
     }
 
     @Override
@@ -47,8 +43,8 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public void setTexture(BufferedImage texture) {
-        this.texture = texture;
+    public void setPos(Vec2 pos) {
+        this.pos = pos;
     }
 
     @Override
@@ -57,8 +53,8 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public void setHitboxes(List<Hitbox> hitboxes) {
-        this.hitboxes = hitboxes;
+    public void setTexture(BufferedImage texture) {
+        this.texture = texture;
     }
 
     @Override
@@ -67,27 +63,18 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public void setVelocity(Vec2 velocity) {
-        this.velocity = velocity;
+    public void setHitboxes(List<Hitbox> hitboxes) {
+        this.hitboxes = hitboxes;
     }
 
     @Override
     public Vec2 getVelocity() {
         return velocity;
     }
-    @Override
-    public void setAcceleration(Vec2 acceleration) {
-        this.acceleration = acceleration;
-    }
 
     @Override
-    public Vec2 getAcceleration() {
-        return acceleration;
-    }
-
-    @Override
-    public void setLastCollision(List<Entity> lastCollision) {
-        this.lastCollision = lastCollision;
+    public void setVelocity(Vec2 velocity) {
+        this.velocity = velocity;
     }
 
     @Override
@@ -96,13 +83,38 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public void setCollidesWith(List<String> collidesWith) {
-        this.collidesWith = collidesWith;
+    public void setLastCollision(List<Entity> lastCollision) {
+        this.lastCollision = lastCollision;
     }
 
     @Override
     public List<String> getCollidesWith() {
         return this.collidesWith;
+    }
+
+    @Override
+    public void setCollidesWith(List<String> collidesWith) {
+        this.collidesWith = collidesWith;
+    }
+
+    @Override
+    public int getPriority() {
+        return this.priority;
+    }
+
+    @Override
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    @Override
+    public int getIndex() {
+        return this.index;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override

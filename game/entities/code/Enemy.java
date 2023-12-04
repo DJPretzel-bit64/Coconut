@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Enemy extends BasicEntity {
+	Vec2 acceleration = new Vec2(0, -800);
 	String direction = "right";
-	int speed = 80;
+	double speed = 100;
 
 	public Enemy(Vec2 pos) {
-		this.acceleration = new Vec2(0, -200);
 		this.pos = pos.plus(new Vec2(16, 16));
 		this.hitboxes.add(new Hitbox(pos.plus(new Vec2(4, 0)), new Vec2(24, 32)));
 		this.collidesWith.add("World");
@@ -28,12 +28,14 @@ public class Enemy extends BasicEntity {
 	@Override
 	public void update(Input input, double delta) {
 		double speed = this.speed * delta;
-		if(velocity.x == 0)
+		if(velocity.x == 0) {
 			direction = Objects.equals(direction, "left") ? "right" : "left";
+		}
 		if(Objects.equals(direction, "left"))
-			velocity.x = speed;
-		if(Objects.equals(direction, "right"))
 			velocity.x = -speed;
+		if(Objects.equals(direction, "right"))
+			velocity.x = speed;
+		this.velocity = this.velocity.plus(this.acceleration.times(delta * delta));
 	}
 
 	@Override
