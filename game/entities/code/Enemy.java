@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Enemy extends BasicEntity {
-	Random random = new Random();
+	public final Random random = new Random();
 	public final Vec2 acceleration = new Vec2(0, -800);
 	public final double speed = 100;
 	String direction = "right";

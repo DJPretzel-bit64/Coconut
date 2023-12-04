@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Door extends BasicEntity {
-	Random random = new Random();
+	public final Random random = new Random();
 
 	public Door(Vec2 pos) {
 		this.index = random.nextInt();

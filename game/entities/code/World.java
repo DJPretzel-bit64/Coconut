@@ -2,6 +2,7 @@ package game.entities.code;
 
 import engine.*;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,10 +11,10 @@ import java.util.Scanner;
 
 
 public class World extends BasicEntity {
-    BufferedImage NSEW, SEW, NEW, NSW, NSE, EW, NS, NE, NW ,SE ,SW, N, S, E, W, none, door, dark;
+    BufferedImage NSEW, SEW, NEW, NSW, NSE, EW, NS, NE, NW ,SE ,SW, N, S, E, W, none, dark, combinedImage, combinedBackground;
     char[][] rawWorld;
     BufferedImage[][] fancyWorld;
-    int worldWidth, worldHeight;
+    int worldWidth, worldHeight, totalWidth, totalHeight, lastWidth, lastHeight;
     
     public World() {
         hitboxes = new ArrayList<>();
@@ -78,25 +79,49 @@ public class World extends BasicEntity {
         E    = texture.getSubimage(96, 64,  32, 32);
         W    = texture.getSubimage(96, 96,  32, 32);
         none = texture.getSubimage(128, 0,   32, 32);
-        door = texture.getSubimage(96,  128, 32, 32);
         dark = texture.getSubimage(96,  160, 32, 32);
+
         calculateFancyWorld();
+
+        totalWidth = 32 * worldWidth;
+        totalHeight = 32 * worldHeight;
+
+        combinedImage = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = combinedImage.createGraphics();
+
+        for(int i = 0; i < fancyWorld.length; i++) {
+            for(int j = 0; j < fancyWorld[i].length; j++) {
+                g.drawImage(fancyWorld[i][j], i * 32, totalHeight - (j + 1) * 32, null);
+            }
+        }
+
+        g.dispose();
+    }
+
+    @Override
+    public void update(Input input, double delta) {
+        if(lastWidth != Engine.width || lastHeight != Engine.height) {
+            lastWidth = Engine.width;
+            lastHeight = Engine.height;
+
+            combinedBackground = new BufferedImage(lastWidth / 3, lastHeight / 3, BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D g = combinedBackground.createGraphics();
+
+            for (int j = -Engine.height / 16 - 2; j < Engine.height / 16 + 2; j++) {
+                for (int i = -Engine.width / 16 - 2; i < Engine.width / 16 + 2; i++) {
+                    g.drawImage(dark, i * 32, j * 32, null);
+                }
+            }
+
+            g.dispose();
+        }
     }
 
     @Override
     public void render(Renderer renderer) {
         if(!Collective.wireframe) {
-            for(int j = -Engine.height / 16 - 2; j < Engine.height / 16 + 2; j++) {
-                for(int i = -Engine.width / 16 - 2; i < Engine.width / 16 + 2; i++) {
-                    renderer.draw(new Vec2(i * 32, j * 32).plus(Collective.playerPos.divide(3).mod(32)), new Vec2(32, 32), dark);
-                }
-            }
-            for(int j = 0; j < worldHeight; j++) {
-                for(int i = 0; i < worldWidth; i++) {
-                    if(rawWorld[i][j] == 'g')
-                        renderer.draw(new Vec2(i * 32, j * 32), new Vec2(32, 32), fancyWorld[i][j]);
-                }
-            }
+            renderer.draw(Collective.playerPos.minus(Collective.playerPos.divide(3).mod(32)), new Vec2(Engine.width / 3., Engine.height / 3.), combinedBackground);
+            renderer.draw(new Vec2(0.5 * totalWidth - 16, 0.5 * totalHeight - 16), new Vec2(totalWidth, totalHeight), combinedImage);
         }
         if(Collective.wireframe || Collective.hitboxes)
             for(Hitbox hitbox : this.hitboxes) {

@@ -38,7 +38,7 @@ public class Player extends BasicEntity {
     public final BufferedImage[] leftFallAni = new BufferedImage[aniLength];
     public final BufferedImage[] rightFallAni = new BufferedImage[aniLength];
     public final BufferedImage[] healthAni = new BufferedImage[maxHealth + 1];
-    public File coffeeSound, slurpSound, portalSound;
+    public final File coffeeSound, slurpSound, portalSound;
     public AudioInputStream audioStream;
     public Clip clip;
     public final Random random = new Random();
@@ -187,13 +187,12 @@ public class Player extends BasicEntity {
     }
 
     private boolean contains(String name) {
-        for(int i = 0; i < lastCollision.size(); i++) {
-            Entity entity = lastCollision.get(i);
-            if (Objects.equals(entity.getName(), name)) {
-                lastCollisionEntity = entity;
-                return true;
-            }
-        }
+		for(Entity entity : lastCollision) {
+			if(Objects.equals(entity.getName(), name)) {
+				lastCollisionEntity = entity;
+				return true;
+			}
+		}
         lastCollisionEntity = null;
         return false;
     }

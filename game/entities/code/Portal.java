@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Portal extends BasicEntity {
-	Random random = new Random();
-	final public int aniLength = 4;
-	final public BufferedImage[] portalAni = new BufferedImage[aniLength];
+	public final Random random = new Random();
+	public final int aniLength = 4;
+	public final BufferedImage[] portalAni = new BufferedImage[aniLength];
 
 	public Portal(Vec2 pos) {
 		this.index = random.nextInt();
