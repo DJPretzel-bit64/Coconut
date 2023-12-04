@@ -10,12 +10,15 @@ import static game.entities.code.Collective.aniIndex;
 
 public class Player extends BasicEntity {
     Vec2 acceleration = new Vec2(0, -800);
+    Vec2 lastPos = new Vec2();
+    Vec2 lastVelocity = new Vec2();
     double speed = 120;
     double jumpSpeed = 280;
     boolean canJump = true;
     String direction = "left";
     int maxHealth = 8;
     int health = maxHealth;
+    int aniNum = 0;
     int aniLength = 4;
     int contentIndex = -1;
     BufferedImage[] idleAni = new BufferedImage[aniLength];
@@ -47,26 +50,39 @@ public class Player extends BasicEntity {
     public void update(Input input, double delta) {
         double speed = this.speed * delta;
         double jumpSpeed = this.jumpSpeed * delta;
+        int aniSpeed = (int) (0.1 / delta);
         if(input.up && canJump) {
             direction = "up";
-            this.velocity.y = jumpSpeed;
+            velocity.y = jumpSpeed;
             canJump = false;
         }
-        if(this.velocity.y == 0)
+        if(velocity.y == 0 && lastVelocity.y < 0)
             canJump = true;
         if(input.left) {
-            this.velocity.x = -speed;
-            direction = "left";
+            velocity.x = -speed;
+            direction = velocity.y > 0 ? "up" : canJump ? "left" : "downLeft";
         }
         else if(input.right) {
-            this.velocity.x = speed;
-            direction = "right";
+            velocity.x = speed;
+            direction = velocity.y > 0 ? "up" : canJump ? "right" : "downRight";
         }
         else {
-            this.velocity.x = 0;
+            velocity.x = 0;
             direction = Objects.equals(direction, "up") ? "up" : "idle";
         }
-        this.velocity = this.velocity.plus(this.acceleration.times(delta * delta));
+        velocity = velocity.plus(acceleration.times(delta * delta));
+        if(lastPos.y != pos.y)
+            canJump = false;
+        lastPos = new Vec2(pos);
+        lastVelocity = new Vec2(velocity);
+
+        aniNum++;
+        if(aniNum >= aniSpeed) {
+            aniNum = 0;
+            aniIndex++;
+            if (aniIndex >= aniLength)
+                aniIndex = 0;
+        }
     }
 
     @Override

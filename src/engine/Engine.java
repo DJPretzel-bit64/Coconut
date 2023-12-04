@@ -29,7 +29,7 @@ public class Engine extends Canvas {
     private final Renderer renderer;
     private final Input input = new Input();
     private final Physics physics;
-    private ArrayList<Entity> entityList = new ArrayList<>();
+    private final ArrayList<Entity> entityList = new ArrayList<>();
     private static final ArrayList<Entity> removeList = new ArrayList<>();
     private static final ArrayList<Entity> addList = new ArrayList<>();
     private Vec2 cameraPos = new Vec2();
@@ -51,6 +51,7 @@ public class Engine extends Canvas {
         height = Integer.parseInt(properties.getProperty("height", "600"));
         title = properties.getProperty("title", "A Game");
         fps = Double.parseDouble(properties.getProperty("fps", "60"));
+//        fps = Math.random() * (144 - 60) + 60;
         double scale = Integer.parseInt(properties.getProperty("scale", "1"));
         entities = properties.getProperty("entities", "/");
         boxes = properties.getProperty("boxes", "/");
@@ -176,18 +177,23 @@ public class Engine extends Canvas {
         long now;
         long timer = System.currentTimeMillis();
         int frames = 0;
+        double delta;
+        double sps = 0;
         while(running) {
             now = System.nanoTime();
-            if((now - lastTime) > 1_000_000_000 / fps) {
-                lastTime = now;
+            delta = (now - lastTime) / 1_000_000_000.;
+            if(delta >= 1 / fps) {
+                lastTime += (int)(1_000_000_000 / fps);
                 update(1 / fps);
+                sps += 1 / fps;
             }
-            frames++;
+            frames ++;
             render();
             if (System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;
-                frame.setTitle(title + " | " + frames + " fps");
+                frame.setTitle(title + " | " + frames + " fps" + " | " + (sps - sps % 0.001) + " sps");
                 frames = 0;
+                sps = 0;
             }
         }
         stop();
