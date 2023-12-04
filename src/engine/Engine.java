@@ -29,10 +29,11 @@ public class Engine extends Canvas {
     private final Renderer renderer;
     private final Input input = new Input();
     private final Physics physics;
-    private final ArrayList<Entity> entityList = new ArrayList<>();
+    private static final ArrayList<Entity> entityList = new ArrayList<>();
     private static final ArrayList<Entity> removeList = new ArrayList<>();
     private static final ArrayList<Entity> addList = new ArrayList<>();
-    private Vec2 cameraPos = new Vec2();
+    public static Vec2 cameraPos = new Vec2();
+    private Entity cameraEntity;
     private final int numLayers;
 
     public static void main(String[] args) {
@@ -52,7 +53,7 @@ public class Engine extends Canvas {
         height = Integer.parseInt(properties.getProperty("height", "600"));
         title = properties.getProperty("title", "A Game");
         tps = Double.parseDouble(properties.getProperty("tps", "60"));
-//        fps = Math.random() * (144 - 60) + 60;
+//        tps = Math.random() * (144 - 60) + 60;
         double scale = Integer.parseInt(properties.getProperty("scale", "1"));
         entities = properties.getProperty("entities", "/");
         boxes = properties.getProperty("boxes", "/");
@@ -62,7 +63,7 @@ public class Engine extends Canvas {
         loadEntities();
         loadBoxes();
 
-        renderer = new Renderer(scale, cameraPos);
+        renderer = new Renderer(scale);
         this.addKeyListener(input);
         this.setPreferredSize(new Dimension(width, height));
 
@@ -104,13 +105,12 @@ public class Engine extends Canvas {
                         entity.setTexture(Objects.requireNonNull(ImageIO.read(new File(properties.getProperty("texture")))));
                         entity.setCollidesWith(new ArrayList<>(Arrays.asList(properties.getProperty("collides_with", "").split(","))));
                         if(Objects.equals(cameraAttach, properties.getProperty("name")))
-                            cameraPos = entity.getPos();
+                            cameraEntity = entity;
                         entity.setLayer(Integer.parseInt(properties.getProperty("layer", "-1")));
                         entity.setIndex(entityList.size());
                         entityList.add(entity);
                     } catch(Exception e) {
                         System.out.println("Error compiling " + properties.getProperty("name") + " class");
-                        e.printStackTrace();
                     }
                 }
             }
@@ -208,6 +208,8 @@ public class Engine extends Canvas {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, width, height);
 
+        cameraPos = cameraEntity.getPos();
+
         renderer.update(g);
 
         for(int i = 0; i < numLayers; i++)
@@ -243,6 +245,10 @@ public class Engine extends Canvas {
 
     public static void addToEntityList(Entity entity) {
         addList.add(entity);
+    }
+
+    public static ArrayList<Entity> getEntityList() {
+        return Engine.entityList;
     }
 
     private void updateEntityList() {

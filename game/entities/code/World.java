@@ -139,8 +139,10 @@ public class World extends BasicEntity {
         for(int j = 0; j < worldHeight; j++) {
             for(int i = 0; i < worldWidth; i++) {
 				switch (rawWorld[i][j]) {
-					case 'e' -> Engine.addToEntityList(new Enemy(new Vec2(i * 32 - 16, j * 32 - 16)));
-					case 'b' -> Engine.addToEntityList(new Bean(new Vec2(i * 32 - 16, j * 32 - 16)));
+					case 'e' -> Engine.addToEntityList(new Enemy(new Vec2(i * 32, j * 32)));
+					case 'b' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32)));
+                    case 'q' -> Engine.addToEntityList(new Portal(new Vec2(i * 32, j * 32)));
+                    case 'd' -> Engine.addToEntityList(new Door(new Vec2(i * 32, j * 32)));
 					case 'g' -> hitboxes.add(new Hitbox(new Vec2(i * 32 - 16, j * 32 - 16), new Vec2(32, 32)));
 					default -> {}
 				}

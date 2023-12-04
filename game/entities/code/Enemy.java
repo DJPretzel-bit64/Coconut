@@ -6,16 +6,19 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 public class Enemy extends BasicEntity {
-	Vec2 acceleration = new Vec2(0, -800);
+	Random random = new Random();
+	public final Vec2 acceleration = new Vec2(0, -800);
+	public final double speed = 100;
 	String direction = "right";
-	double speed = 100;
 
 	public Enemy(Vec2 pos) {
+		this.index = random.nextInt();
 		this.layer = 2;
-		this.pos = pos.plus(new Vec2(16, 16));
-		this.hitboxes.add(new Hitbox(pos.plus(new Vec2(4, 0)), new Vec2(24, 32)));
+		this.pos = pos;
+		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(12, 16)), new Vec2(24, 32)));
 		this.collidesWith.add("World");
 		this.collidesWith.add("Enemy");
 		this.name = "Enemy";

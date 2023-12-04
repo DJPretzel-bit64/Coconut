@@ -2,36 +2,53 @@ package game.entities.code;
 
 import engine.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Objects;
+import java.util.Random;
 
 import static game.entities.code.Collective.aniIndex;
 
 public class Player extends BasicEntity {
-    Vec2 acceleration = new Vec2(0, -800);
-    Vec2 lastPos = new Vec2();
-    Vec2 lastVelocity = new Vec2();
-    double speed = 120;
-    double jumpSpeed = 280;
-    boolean canJump = true;
-    String direction = "left";
-    int maxHealth = 8;
-    int health = 1;
-    int aniNum = 0;
-    int aniLength = 4;
-    int contentIndex = -1;
-    int score = 0;
-    BufferedImage[] idleAni = new BufferedImage[aniLength];
-    BufferedImage[] leftAni = new BufferedImage[aniLength];
-    BufferedImage[] rightAni = new BufferedImage[aniLength];
-    BufferedImage[] upAni = new BufferedImage[aniLength];
-    BufferedImage[] downAni = new BufferedImage[aniLength];
-    BufferedImage[] leftFallAni = new BufferedImage[aniLength];
-    BufferedImage[] rightFallAni = new BufferedImage[aniLength];
-    BufferedImage[] healthAni = new BufferedImage[maxHealth + 1];
+    public final Vec2 acceleration = new Vec2(0, -800);
+    public Vec2 lastPos = new Vec2();
+    public Vec2 lastVelocity = new Vec2();
+    public final double speed = 120;
+    public final double jumpSpeed = 280;
+    public boolean canJump = true;
+    public String direction = "left";
+    public final int maxHealth = 8;
+    public int health = 1;
+    public int aniNum = 0;
+    public final int aniLength = 4;
+    public Entity lastCollisionEntity;
+    public int score = 0;
+    public int lastWidth;
+    public int lastHeight;
+    public double cooldown;
+    public BufferedImage overlay;
+    public final BufferedImage[] idleAni = new BufferedImage[aniLength];
+    public final BufferedImage[] leftAni = new BufferedImage[aniLength];
+    public final BufferedImage[] rightAni = new BufferedImage[aniLength];
+    public final BufferedImage[] upAni = new BufferedImage[aniLength];
+    public final BufferedImage[] downAni = new BufferedImage[aniLength];
+    public final BufferedImage[] leftFallAni = new BufferedImage[aniLength];
+    public final BufferedImage[] rightFallAni = new BufferedImage[aniLength];
+    public final BufferedImage[] healthAni = new BufferedImage[maxHealth + 1];
+    public File coffeeSound, slurpSound, portalSound;
+    public AudioInputStream audioStream;
+    public Clip clip;
+    public final Random random = new Random();
 
     public Player() {
         Collective.playerPos = pos;
+        coffeeSound = new File("game/entities/res/crunch.wav");
+        slurpSound = new File("game/entities/res/slurp.wav");
+        portalSound = new File("game/entities/res/portal.wav");
+        playSound(coffeeSound);
     }
 
     @Override
@@ -82,9 +99,10 @@ public class Player extends BasicEntity {
         lastVelocity = new Vec2(velocity);
 
         if(contains("Enemy")) {
+            playSound(slurpSound);
             health--;
             score++;
-            Engine.removeFromEntityList(lastCollision.get(contentIndex));
+            Engine.removeFromEntityList(lastCollisionEntity);
             if(health == 0) {
                 System.out.println("You finished with " + score + " points!");
                 System.exit(0);
@@ -92,11 +110,29 @@ public class Player extends BasicEntity {
         }
 
         if(contains("Bean")) {
+            playSound(coffeeSound);
             if(health == maxHealth)
                 score++;
             else
                 health++;
-            Engine.removeFromEntityList(lastCollision.get(contentIndex));
+            Engine.removeFromEntityList(lastCollisionEntity);
+        }
+
+        if(contains("Portal") && cooldown == 0) {
+            playSound(portalSound);
+            Entity entity;
+            do {
+                entity = Engine.getEntityList().get(random.nextInt(Engine.getEntityList().size()));
+            } while(!Objects.equals(entity.getName(), "Portal") || entity.getIndex() == lastCollisionEntity.getIndex());
+
+            pos = new Vec2(entity.getPos());
+            hitboxes.get(0).setPos(new Vec2(entity.getPos().minus(new Vec2(8, 16))));
+            cooldown = 3;
+        }
+
+        if(contains("Door") && input.up) {
+            System.out.println("YOU WON! You scored " + score + " points!");
+            System.exit(0);
         }
 
         aniNum++;
@@ -106,11 +142,32 @@ public class Player extends BasicEntity {
             if (aniIndex >= aniLength)
                 aniIndex = 0;
         }
+
+        cooldown = cooldown < 0 ? 0 : cooldown - delta;
     }
 
     @Override
     public void render(Renderer renderer) {
         if(!Collective.wireframe){
+            if(Engine.width != lastWidth || Engine.height != lastHeight) {
+                lastWidth = Engine.width;
+                lastHeight = Engine.height;
+                int imageWidth = Engine.width / 3;
+                int imageHeight = Engine.height / 3;
+
+                Vec2 center = new Vec2(imageWidth / 2., imageHeight / 2.);
+
+                this.overlay = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
+                for(int i = 0; i < imageWidth; i++) {
+                    for(int j = 0; j < imageHeight; j++) {
+                        Vec2 point = new Vec2(i, j);
+                        double length = center.minus(point).length();
+                        int alpha = (int)Math.min((length - length % 10) * 5, 200);
+                        this.overlay.setRGB(i, j, alpha << 24);
+                    }
+                }
+            }
+
             BufferedImage frame = switch(direction) {
                 case "left" -> leftAni[aniIndex];
                 case "right" -> rightAni[aniIndex];
@@ -122,6 +179,7 @@ public class Player extends BasicEntity {
             };
             renderer.draw(pos, size, healthAni[maxHealth - health]);
             renderer.draw(pos, size, frame);
+            renderer.draw(pos, new Vec2(Engine.width, Engine.height).divide(3), overlay);
         }
         if(Collective.wireframe || Collective.hitboxes)
             for(Hitbox hitbox : hitboxes)
@@ -132,11 +190,23 @@ public class Player extends BasicEntity {
         for(int i = 0; i < lastCollision.size(); i++) {
             Entity entity = lastCollision.get(i);
             if (Objects.equals(entity.getName(), name)) {
-                contentIndex = i;
+                lastCollisionEntity = entity;
                 return true;
             }
         }
-        contentIndex = -1;
+        lastCollisionEntity = null;
         return false;
+    }
+
+    private void playSound(File file) {
+        try {
+            audioStream = AudioSystem.getAudioInputStream(file);
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.setFramePosition(0);
+            clip.start();
+        } catch (Exception e) {
+            System.out.println("Error loading audio");
+        }
     }
 }

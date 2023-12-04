@@ -4,17 +4,14 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import static engine.Engine.height;
-import static engine.Engine.width;
+import static engine.Engine.*;
 
 public class Renderer {
     Graphics g;
-    double scale;
-    Vec2 cameraPos;
+    public final double scale;
 
-    public Renderer(double scale, Vec2 cameraPos) {
+    public Renderer(double scale) {
         this.scale = scale;
-        this.cameraPos = cameraPos;
     }
 
     public void update(Graphics g) {
