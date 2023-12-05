@@ -44,6 +44,7 @@ public class Player extends BasicEntity {
     public final Random random = new Random();
 
     public Player() {
+        // setup sounds and position
         Collective.playerPos = pos;
         coffeeSound = new File("game/entities/res/crunch.wav");
         slurpSound = new File("game/entities/res/slurp.wav");
@@ -53,6 +54,7 @@ public class Player extends BasicEntity {
 
     @Override
     public void setTexture(BufferedImage texture) {
+        // get the texture animations
         this.texture = texture;
         for(int i = 0; i < aniLength; i++) {
             rightAni[i] =       texture.getSubimage(0,   i * 32, 32, 32);
@@ -69,17 +71,25 @@ public class Player extends BasicEntity {
 
     @Override
     public void update(Input input, double delta) {
+        // update the play position
         Collective.playerPos = pos;
 
+        // scale the speeds based on the delta value
         double speed = this.speed * delta;
         double jumpSpeed = this.jumpSpeed * delta;
         int aniSpeed = (int) (0.1 / delta);
+
+        // if they press up and can jump, apply the jump velocity and don't let them jump again
         if(input.up && canJump) {
             velocity.y = jumpSpeed;
             canJump = false;
         }
+
+        // check if the velocity is 0 and the player was falling, not jumping and set canJump to true
         if(velocity.y == 0 && lastVelocity.y < 0)
             canJump = true;
+
+        // set the velocity and player direction
         if(input.left) {
             velocity.x = -speed;
             direction = velocity.y > 0 ? "up" : canJump ? "left" : "downLeft";
@@ -92,12 +102,19 @@ public class Player extends BasicEntity {
             velocity.x = 0;
             direction = velocity.y == 0 ? "idle" : "up";
         }
+
+        // increase the velocity by the acceleration
         velocity = velocity.plus(acceleration.times(delta * delta));
+
+        // if they fell, don't allow the player to jump
         if(lastPos.y != pos.y)
             canJump = false;
+
+        // update the last pos and velocity
         lastPos = new Vec2(pos);
         lastVelocity = new Vec2(velocity);
 
+        // check if the player is colliding with an enemy and reduce health and increase score
         if(contains("Enemy")) {
             playSound(slurpSound);
             health--;
@@ -109,6 +126,7 @@ public class Player extends BasicEntity {
             }
         }
 
+        // check if the player is colliding with a bean and increase the health or the score
         if(contains("Bean")) {
             playSound(coffeeSound);
             if(health == maxHealth)
@@ -118,6 +136,7 @@ public class Player extends BasicEntity {
             Engine.removeFromEntityList(lastCollisionEntity);
         }
 
+        // check if the player is colliding with a portal and teleport the player to a random one if they are
         if(contains("Portal") && cooldown == 0) {
             playSound(portalSound);
             Entity entity;
@@ -130,11 +149,13 @@ public class Player extends BasicEntity {
             cooldown = 3;
         }
 
+        // if they jump in the door, they win and the program ends
         if(contains("Door") && input.up) {
             System.out.println("YOU WON! You scored " + score + " points!");
             System.exit(0);
         }
 
+        // increase the animation number and update the animation index once in a while
         aniNum++;
         if(aniNum >= aniSpeed) {
             aniNum = 0;
@@ -143,12 +164,15 @@ public class Player extends BasicEntity {
                 aniIndex = 0;
         }
 
+        // set the cooldown for going through portals
         cooldown = cooldown < 0 ? 0 : cooldown - delta;
     }
 
     @Override
     public void render(Renderer renderer) {
+        // only render the animation if the program isn't in wireframe mode
         if(!Collective.wireframe){
+            // update the light overlay if the width and height are different
             if(Engine.width != lastWidth || Engine.height != lastHeight) {
                 lastWidth = Engine.width;
                 lastHeight = Engine.height;
@@ -160,6 +184,7 @@ public class Player extends BasicEntity {
                 this.overlay = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
                 for(int i = 0; i < imageWidth; i++) {
                     for(int j = 0; j < imageHeight; j++) {
+                        // calculate the light level of the pixel based on the length to the player
                         Vec2 point = new Vec2(i, j);
                         double length = center.minus(point).length();
                         int alpha = (int)Math.min((length - length % 10) * 5, 200);
@@ -168,6 +193,7 @@ public class Player extends BasicEntity {
                 }
             }
 
+            // set the image based on the direction and animation index
             BufferedImage frame = switch(direction) {
                 case "left" -> leftAni[aniIndex];
                 case "right" -> rightAni[aniIndex];
@@ -181,12 +207,13 @@ public class Player extends BasicEntity {
             renderer.draw(pos, size, frame);
             renderer.draw(pos, new Vec2(Engine.width, Engine.height).divide(3), overlay);
         }
+        // render hitbox if the program is in wireframe or hitbox mode
         if(Collective.wireframe || Collective.hitboxes)
-            for(Hitbox hitbox : hitboxes)
-                renderer.draw(hitbox);
+            renderer.draw(hitboxes.get(0));
     }
 
     private boolean contains(String name) {
+        // function to check if the player collided with a specific entity in the last frame
 		for(Entity entity : lastCollision) {
 			if(Objects.equals(entity.getName(), name)) {
 				lastCollisionEntity = entity;
@@ -198,6 +225,7 @@ public class Player extends BasicEntity {
     }
 
     private void playSound(File file) {
+        // function to play a sound given a file location
         try {
             audioStream = AudioSystem.getAudioInputStream(file);
             clip = AudioSystem.getClip();

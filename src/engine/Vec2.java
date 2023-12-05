@@ -1,6 +1,7 @@
 package engine;
 
 public class Vec2 {
+    // store x and y doubles
     public double x;
     public double y;
 
@@ -19,6 +20,7 @@ public class Vec2 {
         this.y = vec2.y;
     }
 
+    // useful algebraic functions
     public Vec2 plus(Vec2 v) {
         return new Vec2(this.x + v.x, this.y + v.y);
     }

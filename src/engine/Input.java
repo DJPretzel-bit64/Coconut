@@ -4,11 +4,13 @@ package engine;
 import java.awt.event.*;
 
 public class Input implements KeyListener, MouseListener, MouseMotionListener {
+    // define accessible content
     private final boolean[] keys = new boolean[66568];
     public boolean left, right, up, down, escape, mouse;
     public Vec2 mousePos;
 
     public void update() {
+        // update the key booleans
         left = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_RIGHT];
         up = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP] || keys[KeyEvent.VK_SPACE];

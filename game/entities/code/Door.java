@@ -13,6 +13,7 @@ public class Door extends BasicEntity {
 	public final Random random = new Random();
 
 	public Door(Vec2 pos) {
+		// set data for the door
 		this.index = random.nextInt();
 		this.layer = 2;
 		this.pos = pos;

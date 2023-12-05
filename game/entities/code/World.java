@@ -17,12 +17,14 @@ public class World extends BasicEntity {
     int worldWidth, worldHeight, totalWidth, totalHeight, lastWidth, lastHeight;
     
     public World() {
+        // set up the world
         hitboxes = new ArrayList<>();
         getRawWorld();
         setWorldHitbox();
     }
     
     private void calculateFancyWorld() {
+        // test relative locations of other world positions and set the texture based on those
         fancyWorld = new BufferedImage[worldWidth][worldHeight];
         for(int j = 0; j < worldHeight; j++) {
             for(int i = 0; i < worldWidth; i++) {
@@ -62,6 +64,7 @@ public class World extends BasicEntity {
     
     @Override
     public void setTexture(BufferedImage texture) {
+        // override the set texture function to define different tile textures
         this.texture = texture;
         NSEW = texture.getSubimage(0,  0 ,  32, 32);
         SEW  = texture.getSubimage(32, 0 ,  32, 32);
@@ -81,48 +84,62 @@ public class World extends BasicEntity {
         none = texture.getSubimage(128, 0,   32, 32);
         dark = texture.getSubimage(96,  160, 32, 32);
 
+        // create an array of BufferedImages that represents the world
         calculateFancyWorld();
 
+        // calculate the width and height of the combined world image
         totalWidth = 32 * worldWidth;
         totalHeight = 32 * worldHeight;
 
+        // define the combinedTexture and get its draw graphics
         combinedImage = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = combinedImage.createGraphics();
 
         for(int i = 0; i < fancyWorld.length; i++) {
             for(int j = 0; j < fancyWorld[i].length; j++) {
+                // draw the image in the array to the combined image
                 g.drawImage(fancyWorld[i][j], i * 32, totalHeight - (j + 1) * 32, null);
             }
         }
 
+        // apply the changes
         g.dispose();
     }
 
     @Override
     public void update(Input input, double delta) {
+        // update the background combined image if the size of the window changed
+
         if(lastWidth != Engine.width || lastHeight != Engine.height) {
+            // update the width and height variables
             lastWidth = Engine.width;
             lastHeight = Engine.height;
 
+            // define the combinedBackground image and get its graphics context
             combinedBackground = new BufferedImage(lastWidth / 3, lastHeight / 3, BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g = combinedBackground.createGraphics();
 
             for (int j = -Engine.height / 16 - 2; j < Engine.height / 16 + 2; j++) {
                 for (int i = -Engine.width / 16 - 2; i < Engine.width / 16 + 2; i++) {
+                    // add the dark texture to the background image
                     g.drawImage(dark, i * 32, j * 32, null);
                 }
             }
 
+            // apply the changes
             g.dispose();
         }
     }
 
     @Override
     public void render(Renderer renderer) {
+        // only render textures if the program isn't in wireframe mode
         if(!Collective.wireframe) {
+            // draw the background and world combined images
             renderer.draw(Collective.playerPos.minus(Collective.playerPos.divide(3).mod(32)), new Vec2(Engine.width / 3., Engine.height / 3.), combinedBackground);
             renderer.draw(new Vec2(0.5 * totalWidth - 16, 0.5 * totalHeight - 16), new Vec2(totalWidth, totalHeight), combinedImage);
         }
+        // only render hitboxes if the program is in wireframe or hitbox mode
         if(Collective.wireframe || Collective.hitboxes)
             for(Hitbox hitbox : this.hitboxes) {
                 renderer.draw(hitbox);
@@ -130,6 +147,7 @@ public class World extends BasicEntity {
     }
 
     private void getRawWorld() {
+        // load the world.dat file into a char[][]
         try(Scanner scanner = new Scanner(new File("game/entities/res/world.dat"))) {
             String value = "";
             int num = 0;
@@ -161,6 +179,7 @@ public class World extends BasicEntity {
     }
 
     private void setWorldHitbox() {
+        // add entities based on character array
         for(int j = 0; j < worldHeight; j++) {
             for(int i = 0; i < worldWidth; i++) {
 				switch (rawWorld[i][j]) {

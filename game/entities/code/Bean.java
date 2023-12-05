@@ -14,6 +14,7 @@ public class Bean extends BasicEntity {
 	public final BufferedImage[] beanAni = new BufferedImage[aniLength];
 
 	public Bean(Vec2 pos) {
+		// set data for the bean
 		this.index = random.nextInt();
 		this.layer = 2;
 		this.pos = pos;
@@ -29,14 +30,17 @@ public class Bean extends BasicEntity {
 
 	@Override
 	public void setTexture(BufferedImage texture) {
+		// add the animation textures to an array
 		for(int i = 0; i < aniLength; i++)
 			beanAni[i] = this.texture.getSubimage(0, (i+1) * 32, 32, 32);
 	}
 
 	@Override
 	public void render(Renderer renderer) {
+		// render the current animation frame if the program isn't in wireframe mode
 		if(!Collective.wireframe)
 			renderer.draw(pos, size, beanAni[Collective.aniIndex]);
+		// render the hitboxes if the program is in wireframe or hitbox mode
 		if(Collective.wireframe || Collective.hitboxes)
 			renderer.draw(hitboxes.get(0));
 	}

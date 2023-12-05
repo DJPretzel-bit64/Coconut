@@ -19,12 +19,14 @@ public class Renderer {
     }
 
     public void draw(Vec2 pos, Vec2 size, BufferedImage texture) {
+        // draw the texture at the pos with a size
         int midX = (int)(0.5 * width);
         int midY = (int)(0.5 * height);
         g.drawImage(texture, (int)(scale * (pos.x - 0.5 * size.x - cameraPos.x)) + midX, (int)(scale * (-pos.y - 0.5 * size.y + cameraPos.y)) + midY, (int)(scale * size.x), (int)(scale * size.y), null);
     }
 
     public void draw(Hitbox hitbox) {
+        // render a hitbox
         int midX = width / 2;
         int midY = height / 2;
         g.setColor(Color.ORANGE);

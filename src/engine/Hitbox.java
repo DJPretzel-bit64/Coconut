@@ -11,6 +11,7 @@ public class Hitbox {
     }
 
     public boolean intersects(Hitbox collide) {
+        // check if this hitbox collides with another
         Rectangle hitbox = new Rectangle((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
         Rectangle collideBox = new Rectangle((int)collide.pos.x, (int)collide.pos.y, (int)collide.size.x, (int)collide.size.y);
         return hitbox.intersects(collideBox);

@@ -15,6 +15,7 @@ public class Enemy extends BasicEntity {
 	String direction = "right";
 
 	public Enemy(Vec2 pos) {
+		// set enemy data
 		this.index = random.nextInt();
 		this.layer = 2;
 		this.pos = pos;
@@ -31,21 +32,29 @@ public class Enemy extends BasicEntity {
 
 	@Override
 	public void update(Input input, double delta) {
+		// scale the speed based on the deltaTime
 		double speed = this.speed * delta;
+
+		// if the velocity is 0 (i.e. it hit something) change direction
 		if(velocity.x == 0) {
 			direction = Objects.equals(direction, "left") ? "right" : "left";
 		}
+		// move left or right based on their direction
 		if(Objects.equals(direction, "left"))
 			velocity.x = -speed;
 		if(Objects.equals(direction, "right"))
 			velocity.x = speed;
+
+		// update the velocity based on the acceleration
 		this.velocity = this.velocity.plus(this.acceleration.times(delta * delta));
 	}
 
 	@Override
 	public void render(Renderer renderer) {
+		// render texture if the program isn't in wireframe mode
 		if(!Collective.wireframe)
 			renderer.draw(pos, size, texture);
+		// render the hitbox if the program is in wireframe or hitbox mode
 		if(Collective.wireframe || Collective.hitboxes)
 			renderer.draw(hitboxes.get(0));
 	}
