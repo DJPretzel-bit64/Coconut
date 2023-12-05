@@ -231,9 +231,6 @@ public class Engine extends Canvas {
         // apply the graphics context
         g.dispose();
         bs.show();
-
-        // sync the framerate
-        Toolkit.getDefaultToolkit().sync();
     }
 
     private void update(double delta) {
