@@ -26,8 +26,6 @@ public class Player extends BasicEntity {
     public final int aniLength = 4;
     public Entity lastCollisionEntity;
     public int score = 0;
-    public int lastWidth;
-    public int lastHeight;
     public double cooldown;
     public BufferedImage overlay;
     public final BufferedImage[] idleAni = new BufferedImage[aniLength];
@@ -172,26 +170,26 @@ public class Player extends BasicEntity {
     public void render(Renderer renderer) {
         // only render the animation if the program isn't in wireframe mode
         if(!Collective.wireframe){
-            // update the light overlay if the width and height are different
-            if(Engine.width != lastWidth || Engine.height != lastHeight) {
-                lastWidth = Engine.width;
-                lastHeight = Engine.height;
-                int imageWidth = Engine.width / 3;
-                int imageHeight = Engine.height / 3;
-
-                Vec2 center = new Vec2(imageWidth / 2., imageHeight / 2.);
-
-                this.overlay = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
-                for(int i = 0; i < imageWidth; i++) {
-                    for(int j = 0; j < imageHeight; j++) {
-                        // calculate the light level of the pixel based on the length to the player
-                        Vec2 point = new Vec2(i, j);
-                        double length = center.minus(point).length();
-                        int alpha = (int)Math.min((length - length % 10) * 5, 200);
-                        this.overlay.setRGB(i, j, alpha << 24);
-                    }
-                }
-            }
+//            // update the light overlay if the width and height are different
+//            if(Engine.width != lastWidth || Engine.height != lastHeight) {
+//                lastWidth = Engine.width;
+//                lastHeight = Engine.height;
+//                int imageWidth = Engine.width / 3;
+//                int imageHeight = Engine.height / 3;
+//
+//                Vec2 center = new Vec2(imageWidth / 2., imageHeight / 2.);
+//
+//                this.overlay = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
+//                for(int i = 0; i < imageWidth; i++) {
+//                    for(int j = 0; j < imageHeight; j++) {
+//                        // calculate the light level of the pixel based on the length to the player
+//                        Vec2 point = new Vec2(i, j);
+//                        double length = center.minus(point).length();
+//                        int alpha = (int)Math.min((length - length % 10) * 5, 200);
+//                        this.overlay.setRGB(i, j, alpha << 24);
+//                    }
+//                }
+//            }
 
             // set the image based on the direction and animation index
             BufferedImage frame = switch(direction) {

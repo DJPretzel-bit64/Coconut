@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,16 +26,20 @@ public class Engine extends Canvas {
     private final double tps;
     private final String entities;
     private final String boxes;
+    private final String lights;
     private final String cameraAttach;
+    private final double scale;
     private final Renderer renderer;
     private final Input input = new Input();
     private final Physics physics;
     private static final ArrayList<Entity> entityList = new ArrayList<>();
+    public static final ArrayList<Light> lightList = new ArrayList<>();
     private static final ArrayList<Entity> removeList = new ArrayList<>();
     private static final ArrayList<Entity> addList = new ArrayList<>();
     public static Vec2 cameraPos = new Vec2();
     private Entity cameraEntity;
     private final int numLayers;
+    BufferedImage overlay = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
 
     public static void main(String[] args) {
         new Engine();
@@ -52,15 +57,17 @@ public class Engine extends Canvas {
         height = Integer.parseInt(properties.getProperty("height", "600"));
         title = properties.getProperty("title", "A Game");
         tps = Double.parseDouble(properties.getProperty("tps", "60"));
-        double scale = Integer.parseInt(properties.getProperty("scale", "1"));
+        scale = Double.parseDouble(properties.getProperty("scale", "1"));
         entities = properties.getProperty("entities", "/");
         boxes = properties.getProperty("boxes", "/");
+        lights = properties.getProperty("lights", "/");
         cameraAttach = properties.getProperty("camera_attach", "");
         numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));
 
-        // load entities and hitboxes
+        // load entities, hitboxes, and lights
         loadEntities();
         loadBoxes();
+        loadLights();
 
         // setup basic window stuff
         renderer = new Renderer(scale);
@@ -115,6 +122,7 @@ public class Engine extends Canvas {
                         entity.setIndex(entityList.size());
                         entityList.add(entity);
                     } catch(Exception e) {
+                        e.printStackTrace();
                         System.out.println("Error compiling " + properties.getProperty("name") + " class");
                     }
                 }
@@ -166,6 +174,33 @@ public class Engine extends Canvas {
         }
     }
 
+    private void loadLights() {
+        // get the data for the lights from the file defined in the launch.properties file
+        Path folderPath = Paths.get(lights);
+        try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
+            for(Path file: directoryStream) {
+                if(Files.isRegularFile(file)) {
+                    // for each regular file in that directory, create a hitbox based on the properties
+                    Properties properties = new Properties();
+                    try {
+                        properties.load(new FileInputStream(file.toString()));
+                    }
+                    catch(IOException e) {
+                        System.out.println("Unable to load properties for " + properties.getProperty("name") + " light");
+                    }
+
+                    double posx = Double.parseDouble(properties.getProperty("posx", "0"));
+                    double posy = Double.parseDouble(properties.getProperty("posy", "0"));
+                    int radius = Integer.parseInt(properties.getProperty("radius", "10"));
+                    String attach = properties.getProperty("attach", "");
+                    Engine.lightList.add(new Light(new Vec2(posx, posy), radius, attach));
+                }
+            }
+        } catch(IOException e) {
+            System.out.println("Error loading light folder");
+        }
+    }
+
     private synchronized void start() {
         // set the running status to true and run the main loop
         running = true;
@@ -211,10 +246,8 @@ public class Engine extends Canvas {
             return;
         }
 
-        // get the drawGraphics and draw the background
+        // get the drawGraphics
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, width, height);
 
         // update the camera pos used
         cameraPos = cameraEntity.getPos();
@@ -227,6 +260,8 @@ public class Engine extends Canvas {
             for(Entity entity : entityList)
                 if(entity.getLayer() == i)
                     entity.render(renderer);
+
+        drawOverlay(g);
 
         // apply the graphics context
         g.dispose();
@@ -245,10 +280,48 @@ public class Engine extends Canvas {
         // update each entity
         for(Entity entity : entityList) {
             entity.update(input, delta);
+            for (Light light : lightList)
+                if (Objects.equals(light.attach, entity.getName()))
+                    light.pos = new Vec2(entity.getPos().divide(scale));
         }
 
         // update the entity list based on items scheduled to be added or removed
         updateEntityList();
+    }
+
+    private void drawOverlay(Graphics g) {
+        int imageWidth = (int) (width / scale);
+        int imageHeight = (int) (height / scale);
+
+        overlay = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
+
+        Graphics2D overlayGraphics = overlay.createGraphics();
+        overlayGraphics.setColor(new Color(0, 0, 0, 200));
+        overlayGraphics.fillRect(0, 0, imageWidth, imageHeight);
+
+        for (Light light : lightList) {
+            for (int i = 0; i < imageWidth; i++) {
+                for (int j = 0; j < imageHeight; j++) {
+                    // calculate the light level of the pixel based on the length to the player
+                    Vec2 point = new Vec2(i, -j).plus(cameraPos).minus(new Vec2(imageWidth / 2., -imageHeight / 2.)).divide(scale);
+                    double length = Math.pow(light.pos.minus(point).length() / light.radius, 2);
+                    int alpha = (int) Math.min((length), 220);
+
+                    // Get the original color of the pixel
+                    int originalColor = overlay.getRGB(i, j);
+
+                    // Extract the original alpha value
+                    int originalAlpha = (originalColor >> 24) & 0xFF;
+
+                    // Update the alpha channel and set the new color
+                    int newAlpha = Math.min(alpha, originalAlpha);
+                    int newColor = (originalColor & 0x00FFFFFF) | (newAlpha << 24);
+
+                    overlay.setRGB(i, j, newColor);
+                }
+            }
+        }
+        g.drawImage(overlay, 0, 0, width, height, null);
     }
 
     private static Class<?> loadClass(String className) throws Exception {
@@ -269,15 +342,17 @@ public class Engine extends Canvas {
 
     public static ArrayList<Entity> getEntityList() {
         // allow access to the entity list
-        return Engine.entityList;
+        return new ArrayList<>(Engine.entityList);
     }
 
     private void updateEntityList() {
         // apply the updates from the add and remove lists, then clear the update lists
-		for(Entity entity : removeList)
+		for(Entity entity : removeList) {
             entityList.remove(entity);
-        for(Entity entity : addList)
+        }
+        for(Entity entity : addList) {
             entityList.add(0, entity);
+        }
         removeList.clear();
         addList.clear();
     }
