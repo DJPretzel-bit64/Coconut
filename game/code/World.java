@@ -1,4 +1,4 @@
-package game.entities.code;
+package game.code;
 
 import engine.*;
 
@@ -136,8 +136,8 @@ public class World extends BasicEntity {
         // only render textures if the program isn't in wireframe mode
         if(!Collective.wireframe) {
             // draw the background and world combined images
-            renderer.draw(Collective.playerPos.minus(Collective.playerPos.divide(3).mod(32)), new Vec2(Engine.width / 3., Engine.height / 3.), combinedBackground);
-            renderer.draw(new Vec2(0.5 * totalWidth - 16, 0.5 * totalHeight - 16), new Vec2(totalWidth, totalHeight), combinedImage);
+            renderer.draw(Collective.playerPos.divide(-3).mod(32), new Vec2(Engine.width / 3., Engine.height / 3.), combinedBackground, false);
+            renderer.draw(new Vec2(0.5 * totalWidth - 16, 0.5 * totalHeight - 16), new Vec2(totalWidth, totalHeight), combinedImage, true);
         }
         // only render hitboxes if the program is in wireframe or hitbox mode
         if(Collective.wireframe || Collective.hitboxes)
@@ -148,7 +148,7 @@ public class World extends BasicEntity {
 
     private void getRawWorld() {
         // load the world.dat file into a char[][]
-        try(Scanner scanner = new Scanner(new File("game/entities/res/world.dat"))) {
+        try(Scanner scanner = new Scanner(new File("game/res/world.dat"))) {
             String value = "";
             int num = 0;
             for(char character : scanner.nextLine().toCharArray()) {

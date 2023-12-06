@@ -1,4 +1,4 @@
-package game.entities.code;
+package game.code;
 
 import engine.*;
 
@@ -21,7 +21,7 @@ public class Bean extends BasicEntity {
 		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(16, 16)), new Vec2(32, 32)));
 		this.name = "Bean";
 		try {
-			this.texture = ImageIO.read(new File("game/entities/res/world.png"));
+			this.texture = ImageIO.read(new File("game/res/world.png"));
 		} catch(IOException e) {
 			System.out.println("Error loading bean textures");
 		}
@@ -39,7 +39,7 @@ public class Bean extends BasicEntity {
 	public void render(Renderer renderer) {
 		// render the current animation frame if the program isn't in wireframe mode
 		if(!Collective.wireframe)
-			renderer.draw(pos, size, beanAni[Collective.aniIndex]);
+			renderer.draw(pos, size, beanAni[Collective.aniIndex], true);
 		// render the hitboxes if the program is in wireframe or hitbox mode
 		if(Collective.wireframe || Collective.hitboxes)
 			renderer.draw(hitboxes.get(0));

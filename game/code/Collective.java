@@ -1,4 +1,4 @@
-package game.entities.code;
+package game.code;
 
 import engine.Vec2;
 

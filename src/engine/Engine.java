@@ -24,9 +24,6 @@ public class Engine extends Canvas {
     public static int height;
     private final String title;
     private final double tps;
-    private final String entities;
-    private final String boxes;
-    private final String lights;
     private final String cameraAttach;
     public static double scale;
     private final Renderer renderer;
@@ -40,7 +37,11 @@ public class Engine extends Canvas {
     private Entity cameraEntity;
     private final int numLayers;
     private final int baseLightLevel;
-    BufferedImage overlay = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
+    private boolean paused = false;
+    private boolean escapeLast = false;
+    private BufferedImage overlay = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
+    private BufferedImage menu, buttonTile, resumeNormal, resumeHovered, exitNormal, exitHovered;
+    private final ArrayList<Button> buttons = new ArrayList<>();
 
     public static void main(String[] args) {
         new Engine();
@@ -59,12 +60,14 @@ public class Engine extends Canvas {
         title = properties.getProperty("title", "A Game");
         tps = Double.parseDouble(properties.getProperty("tps", "60"));
         scale = Double.parseDouble(properties.getProperty("scale", "1"));
-        entities = properties.getProperty("entities", "/");
-        boxes = properties.getProperty("boxes", "/");
-        lights = properties.getProperty("lights", "/");
         cameraAttach = properties.getProperty("camera_attach", "");
         numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));
         baseLightLevel = 255 - Integer.parseInt(properties.getProperty("light_level", "250"));
+
+        // initiate default pause menu buttons
+        getPauseTextures();
+        buttons.add(new Button(resumeNormal, resumeHovered, new Vec2(0, 14), new Vec2(64, 12), () -> paused = false));
+        buttons.add(new Button(exitNormal, exitHovered, new Vec2(0, -4), new Vec2(64, 12), () -> System.exit(0)));
 
         // load entities, hitboxes, and lights
         loadEntities();
@@ -74,6 +77,8 @@ public class Engine extends Canvas {
         // setup basic window stuff
         renderer = new Renderer(scale);
         this.addKeyListener(input);
+        this.addMouseListener(input);
+        this.addMouseMotionListener(input);
         this.setPreferredSize(new Dimension(width, height));
 
         physics = new Physics(entityList);
@@ -82,6 +87,8 @@ public class Engine extends Canvas {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
         frame.addKeyListener(input);
+        frame.addMouseListener(input);
+        frame.addMouseMotionListener(input);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setResizable(true);
@@ -92,8 +99,8 @@ public class Engine extends Canvas {
     }
 
     public void loadEntities() {
-        // load entities from directory set in launch.properties
-        Path folderPath = Paths.get(entities);
+        // load entities from the game/entities directory
+        Path folderPath = Paths.get("game/entities");
         try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
             for(Path file : directoryStream) {
                 // for each file in the directory that is a regular file
@@ -130,13 +137,13 @@ public class Engine extends Canvas {
                 }
             }
         } catch(IOException e) {
-            System.out.println("Folder: \"" + entities + "\" does not exist.");
+            System.out.println("Error loading entity folder");
         }
     }
 
     private void loadBoxes() {
-        // get the data for the hitboxes from the file defined in the launch.properties file
-        Path folderPath = Paths.get(boxes);
+        // get the data for the hitboxes from the game/boxes directory
+        Path folderPath = Paths.get("game/boxes");
         try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
             for(Path file: directoryStream) {
                 if(Files.isRegularFile(file)) {
@@ -177,8 +184,8 @@ public class Engine extends Canvas {
     }
 
     private void loadLights() {
-        // get the data for the lights from the file defined in the launch.properties file
-        Path folderPath = Paths.get(lights);
+        // get the data for the lights from the game/lights directory
+        Path folderPath = Paths.get("game/lights");
         try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
             for(Path file: directoryStream) {
                 if(Files.isRegularFile(file)) {
@@ -266,6 +273,10 @@ public class Engine extends Canvas {
         // render the light overlay
         g.drawImage(overlay, 0, 0, width, height, null);
 
+        // render the pause menu if the game is paused
+        if(paused)
+            renderPauseMenu(renderer);
+
         // apply the graphics context
         g.dispose();
         bs.show();
@@ -276,23 +287,34 @@ public class Engine extends Canvas {
         width = this.getWidth();
         height = this.getHeight();
 
-        // update the user input and physics systems
-        input.update();
-        physics.update();
-
-        // update each entity
-        for(Entity entity : entityList) {
-            entity.update(input, delta);
-            for (Light light : lightList)
-                if (Objects.equals(light.attach, entity.getName()))
-                    light.pos = new Vec2(entity.getPos());
-        }
-
-        // update the entity list based on items scheduled to be added or removed
-        updateEntityList();
-
         // update the light overlay
         updateOverlay();
+
+        // check if the escape key was pressed and pause the game
+        input.update(width, height, scale);
+        if(input.escape && !escapeLast)
+            paused = !paused;
+        escapeLast = input.escape;
+
+        // update the game if it's not paused
+        if(!paused) {
+            // update the user physics system
+            physics.update();
+
+            // update each entity
+            for (Entity entity : entityList) {
+                entity.update(input, delta);
+                for (Light light : lightList)
+                    if (Objects.equals(light.attach, entity.getName()))
+                        light.pos = new Vec2(entity.getPos());
+            }
+
+            // update the entity list based on items scheduled to be added or removed
+            updateEntityList();
+        }
+        // otherwise update the pause menu
+        else
+            updatePauseMenu(input);
     }
 
     private void updateOverlay() {
@@ -329,6 +351,44 @@ public class Engine extends Canvas {
         }
     }
 
+    private void updateEntityList() {
+        // apply the updates from the add and remove lists, then clear the update lists
+        for(Entity entity : removeList) {
+            entityList.remove(entity);
+        }
+        for(Entity entity : addList) {
+            entityList.add(0, entity);
+        }
+        removeList.clear();
+        addList.clear();
+    }
+
+    private void getPauseTextures() {
+        try {
+            menu = ImageIO.read(new File("game/res/pauseMenu.png"));
+            buttonTile = ImageIO.read(new File("game/res/buttons.png"));
+        }catch(IOException e) {
+            System.out.println("Error loading menu texture.");
+        }
+        resumeNormal = buttonTile.getSubimage(0, 0, 64, 12);
+        resumeHovered = buttonTile.getSubimage(0, 12, 64, 12);
+        exitNormal = buttonTile.getSubimage(0, 24, 64, 12);
+        exitHovered = buttonTile.getSubimage(0, 36, 64, 12);
+    }
+
+    private void updatePauseMenu(Input input) {
+        for(Button button : buttons) {
+            button.update(input);
+        }
+    }
+
+    private void renderPauseMenu(Renderer renderer) {
+        renderer.draw(new Vec2(), new Vec2(128, 96), menu, false);
+        for(Button button : buttons) {
+            button.render(renderer);
+        }
+    }
+
     private static Class<?> loadClass(String className) throws Exception {
         // compile and load a class from its className
         URLClassLoader classLoader = new URLClassLoader(new URL[]{new File("").toURI().toURL()});
@@ -348,17 +408,5 @@ public class Engine extends Canvas {
     public static ArrayList<Entity> getEntityList() {
         // allow access to the entity list
         return new ArrayList<>(Engine.entityList);
-    }
-
-    private void updateEntityList() {
-        // apply the updates from the add and remove lists, then clear the update lists
-		for(Entity entity : removeList) {
-            entityList.remove(entity);
-        }
-        for(Entity entity : addList) {
-            entityList.add(0, entity);
-        }
-        removeList.clear();
-        addList.clear();
     }
 }

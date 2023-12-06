@@ -1,4 +1,4 @@
-package game.entities.code;
+package game.code;
 
 import engine.*;
 
@@ -24,7 +24,7 @@ public class Enemy extends BasicEntity {
 		this.collidesWith.add("Enemy");
 		this.name = "Enemy";
 		try {
-			this.texture = ImageIO.read(new File("game/entities/res/enemy.png"));
+			this.texture = ImageIO.read(new File("game/res/enemy.png"));
 		} catch(IOException e) {
 			System.out.println("Unable to load enemy textures");
 		}
@@ -53,7 +53,7 @@ public class Enemy extends BasicEntity {
 	public void render(Renderer renderer) {
 		// render texture if the program isn't in wireframe mode
 		if(!Collective.wireframe)
-			renderer.draw(pos, size, texture);
+			renderer.draw(pos, size, texture, true);
 		// render the hitbox if the program is in wireframe or hitbox mode
 		if(Collective.wireframe || Collective.hitboxes)
 			renderer.draw(hitboxes.get(0));

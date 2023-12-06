@@ -122,6 +122,6 @@ public class BasicEntity implements Entity, Serializable {
 
     @Override
     public void render(Renderer renderer) {
-        renderer.draw(this.pos, this.size, this.texture);
+        renderer.draw(this.pos, this.size, this.texture, true);
     }
 }

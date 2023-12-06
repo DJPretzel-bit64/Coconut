@@ -1,4 +1,4 @@
-package game.entities.code;
+package game.code;
 
 import engine.BasicEntity;
 import engine.Hitbox;
@@ -20,7 +20,7 @@ public class Door extends BasicEntity {
 		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(16, 16)), new Vec2(32, 32)));
 		this.name = "Door";
 		try {
-			this.texture = ImageIO.read(new File("game/entities/res/world.png")).getSubimage(96, 128, 32, 32);
+			this.texture = ImageIO.read(new File("game/res/world.png")).getSubimage(96, 128, 32, 32);
 		} catch(IOException e) {
 			System.out.println("Error loading bean textures");
 		}

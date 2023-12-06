@@ -1,4 +1,4 @@
-package game.entities.code;
+package game.code;
 
 import engine.*;
 
@@ -9,8 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Objects;
 import java.util.Random;
-
-import static game.entities.code.Collective.aniIndex;
 
 public class Player extends BasicEntity {
     public final Vec2 acceleration = new Vec2(0, -800);
@@ -44,9 +42,9 @@ public class Player extends BasicEntity {
     public Player() {
         // setup sounds and position
         Collective.playerPos = pos;
-        coffeeSound = new File("game/entities/res/crunch.wav");
-        slurpSound = new File("game/entities/res/slurp.wav");
-        portalSound = new File("game/entities/res/portal.wav");
+        coffeeSound = new File("game/res/crunch.wav");
+        slurpSound = new File("game/res/slurp.wav");
+        portalSound = new File("game/res/portal.wav");
         playSound(coffeeSound);
     }
 
@@ -157,9 +155,9 @@ public class Player extends BasicEntity {
         aniNum++;
         if(aniNum >= aniSpeed) {
             aniNum = 0;
-            aniIndex++;
-            if (aniIndex >= aniLength)
-                aniIndex = 0;
+            Collective.aniIndex++;
+            if (Collective.aniIndex >= aniLength)
+                Collective.aniIndex = 0;
         }
 
         // set the cooldown for going through portals
@@ -173,17 +171,17 @@ public class Player extends BasicEntity {
         if(!Collective.wireframe){
             // set the image based on the direction and animation index
             BufferedImage frame = switch(direction) {
-                case "left" -> leftAni[aniIndex];
-                case "right" -> rightAni[aniIndex];
-                case "up" -> upAni[aniIndex];
-                case "down" -> downAni[aniIndex];
-                case "downLeft" -> leftFallAni[aniIndex];
-                case "downRight" -> rightFallAni[aniIndex];
-                default -> idleAni[aniIndex];
+                case "left" -> leftAni[Collective.aniIndex];
+                case "right" -> rightAni[Collective.aniIndex];
+                case "up" -> upAni[Collective.aniIndex];
+                case "down" -> downAni[Collective.aniIndex];
+                case "downLeft" -> leftFallAni[Collective.aniIndex];
+                case "downRight" -> rightFallAni[Collective.aniIndex];
+                default -> idleAni[Collective.aniIndex];
             };
-            renderer.draw(pos, size, healthAni[maxHealth - health]);
-            renderer.draw(pos, size, frame);
-            renderer.draw(pos, new Vec2(Engine.width, Engine.height).divide(3), overlay);
+            renderer.draw(pos, size, healthAni[maxHealth - health], true);
+            renderer.draw(pos, size, frame, true);
+            renderer.draw(pos, new Vec2(Engine.width, Engine.height).divide(3), overlay, true);
         }
         // render hitbox if the program is in wireframe or hitbox mode
         if(Collective.wireframe || Collective.hitboxes)
