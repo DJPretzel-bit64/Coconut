@@ -5,9 +5,10 @@ public class Light {
 	public double radius;
 	public String attach;
 
-	public Light(Vec2 pos, int radius, String attach) {
+	public Light(Vec2 pos, double radius, String attach) {
 		this.pos = pos;
 		this.radius = radius;
 		this.attach = attach;
+
 	}
 }

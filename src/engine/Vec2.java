@@ -45,11 +45,19 @@ public class Vec2 {
         return this.divide(this.length());
     }
 
+    public double lengthSquared() {
+        return this.x * this.x + this.y * this.y;
+    }
+
     public double length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return Math.sqrt(this.lengthSquared());
     }
 
     public String toString() {
         return "x: " + this.x + " ; y: " + this.y;
+    }
+
+    public boolean equals(Vec2 vec2) {
+        return this.x == vec2.x && this.y == vec2.y;
     }
 }

@@ -28,7 +28,7 @@ public class Engine extends Canvas {
     private final String boxes;
     private final String lights;
     private final String cameraAttach;
-    private final double scale;
+    public static double scale;
     private final Renderer renderer;
     private final Input input = new Input();
     private final Physics physics;
@@ -39,6 +39,7 @@ public class Engine extends Canvas {
     public static Vec2 cameraPos = new Vec2();
     private Entity cameraEntity;
     private final int numLayers;
+    private final int baseLightLevel;
     BufferedImage overlay = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
 
     public static void main(String[] args) {
@@ -63,6 +64,7 @@ public class Engine extends Canvas {
         lights = properties.getProperty("lights", "/");
         cameraAttach = properties.getProperty("camera_attach", "");
         numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));
+        baseLightLevel = 255 - Integer.parseInt(properties.getProperty("light_level", "250"));
 
         // load entities, hitboxes, and lights
         loadEntities();
@@ -191,7 +193,7 @@ public class Engine extends Canvas {
 
                     double posx = Double.parseDouble(properties.getProperty("posx", "0"));
                     double posy = Double.parseDouble(properties.getProperty("posy", "0"));
-                    int radius = Integer.parseInt(properties.getProperty("radius", "10"));
+                    double radius = Double.parseDouble(properties.getProperty("radius", "10"));
                     String attach = properties.getProperty("attach", "");
                     Engine.lightList.add(new Light(new Vec2(posx, posy), radius, attach));
                 }
@@ -261,7 +263,8 @@ public class Engine extends Canvas {
                 if(entity.getLayer() == i)
                     entity.render(renderer);
 
-        drawOverlay(g);
+        // render the light overlay
+        g.drawImage(overlay, 0, 0, width, height, null);
 
         // apply the graphics context
         g.dispose();
@@ -282,30 +285,33 @@ public class Engine extends Canvas {
             entity.update(input, delta);
             for (Light light : lightList)
                 if (Objects.equals(light.attach, entity.getName()))
-                    light.pos = new Vec2(entity.getPos().divide(scale));
+                    light.pos = new Vec2(entity.getPos());
         }
 
         // update the entity list based on items scheduled to be added or removed
         updateEntityList();
+
+        // update the light overlay
+        updateOverlay();
     }
 
-    private void drawOverlay(Graphics g) {
+    private void updateOverlay() {
         int imageWidth = (int) (width / scale);
         int imageHeight = (int) (height / scale);
 
         overlay = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
 
         Graphics2D overlayGraphics = overlay.createGraphics();
-        overlayGraphics.setColor(new Color(0, 0, 0, 200));
+        overlayGraphics.setColor(new Color(0, 0, 0, baseLightLevel));
         overlayGraphics.fillRect(0, 0, imageWidth, imageHeight);
 
         for (Light light : lightList) {
             for (int i = 0; i < imageWidth; i++) {
                 for (int j = 0; j < imageHeight; j++) {
                     // calculate the light level of the pixel based on the length to the player
-                    Vec2 point = new Vec2(i, -j).plus(cameraPos).minus(new Vec2(imageWidth / 2., -imageHeight / 2.)).divide(scale);
-                    double length = Math.pow(light.pos.minus(point).length() / light.radius, 2);
-                    int alpha = (int) Math.min((length), 220);
+                    Vec2 point = new Vec2(i, -j).plus(cameraPos).minus(new Vec2(imageWidth / 2., -imageHeight / 2.));
+                    double length = light.pos.minus(point).lengthSquared() / (light.radius * light.radius);
+                    int alpha = (int) (length > baseLightLevel ? baseLightLevel : length);
 
                     // Get the original color of the pixel
                     int originalColor = overlay.getRGB(i, j);
@@ -321,7 +327,6 @@ public class Engine extends Canvas {
                 }
             }
         }
-        g.drawImage(overlay, 0, 0, width, height, null);
     }
 
     private static Class<?> loadClass(String className) throws Exception {
