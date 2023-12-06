@@ -18,7 +18,7 @@ public class Portal extends BasicEntity {
 		this.index = random.nextInt();
 		this.layer = 2;
 		this.pos = pos;
-		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(16, 16)), new Vec2(32, 32)));
+		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(8, 16)), new Vec2(16, 32)));
 		Engine.lightList.add(new Light(pos, 2, ""));
 		this.name = "Portal";
 		try {
