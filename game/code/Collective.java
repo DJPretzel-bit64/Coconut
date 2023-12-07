@@ -9,7 +9,7 @@ public class Collective {
     public static final boolean hitboxes = false;
     public static final boolean wireframe = false;
     public static int aniIndex = 0;
-    public static boolean paused = true;
-    public static boolean started = false;
-    public static Menu mainMenu;
+    public static boolean paused = false, running = false;
+    public static Menu mainMenu, lostMenu, wonMenu;
+    public static int score;
 }

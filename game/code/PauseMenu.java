@@ -25,13 +25,11 @@ public class PauseMenu extends Menu {
 		BufferedImage menuNormal = buttonTextures.getSubimage(0, 72, 43, 12);
 		BufferedImage menuHovered = buttonTextures.getSubimage(0, 84, 43, 12);
 
-		this.buttons.add(new Button(resumeNormal, resumeHovered, new Vec2(0, -10), new Vec2(60, 12), () -> Collective.paused = false));
+		this.buttons.add(new Button(resumeNormal, resumeHovered, new Vec2(0, -10), new Vec2(59, 12), () -> Collective.paused = false));
 		this.buttons.add(new Button(exitNormal, exitHovered, new Vec2(0, 10), new Vec2(40, 12), () -> System.exit(0)));
 		this.buttons.add(new Button(menuNormal, menuHovered, new Vec2(0, -30), new Vec2(43, 12), () -> {
-			visible = false;
 			Collective.mainMenu.setVisible(true);
-			Collective.paused = true;
-			Collective.started = false;
+			Collective.paused = false;
 			Engine.lightsEnabled = false;
 			for(Entity entity : Engine.getEntityList()) {
 				if(! (entity instanceof Menu))
@@ -45,7 +43,7 @@ public class PauseMenu extends Menu {
 		if(input.escape && !lastEscape)
 			Collective.paused = !Collective.paused;
 		lastEscape = input.escape;
-		visible = Collective.paused && Collective.started;
+		visible = Collective.paused && Collective.running;
 		if(visible) {
 			for(Button button : buttons)
 				button.update(input);

@@ -8,7 +8,7 @@ public class Menu extends BasicEntity {
 	public ArrayList<Button> buttons = new ArrayList<>();
 	public BufferedImage background, buttonTextures;
 
-	public void setVisible(Boolean visible) {
+	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 

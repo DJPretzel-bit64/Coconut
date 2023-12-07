@@ -42,7 +42,6 @@ public class Player extends BasicEntity {
 
     public Player(Vec2 pos) {
         // setup sounds and position
-        System.out.println(pos);
         this.pos = pos;
         name = "Player";
         size = new Vec2(32, 32);
@@ -53,6 +52,7 @@ public class Player extends BasicEntity {
         }
         setTexture();
         hitboxes.add(new Hitbox(pos.minus(new Vec2(8, 16)), new Vec2(16, 30)));
+        Engine.lightList.add(new Light(pos, 4, "Player"));
 
         collidesWith.add("World");
         layer = 3;
@@ -129,8 +129,8 @@ public class Player extends BasicEntity {
                 score++;
                 Engine.removeFromEntityList(lastCollisionEntity);
                 if (health == 0) {
-                    System.out.println("You finished with " + score + " points!");
-                    System.exit(0);
+                    Collective.score = score;
+                    Collective.lostMenu.setVisible(true);
                 }
             }
 
@@ -159,8 +159,8 @@ public class Player extends BasicEntity {
 
             // if they jump in the door, they win and the program ends
             if (contains("Door") && input.up) {
-                System.out.println("YOU WON! You scored " + score + " points!");
-                System.exit(0);
+                Collective.score = score;
+                Collective.wonMenu.setVisible(true);
             }
 
             // set the cooldown for going through portals

@@ -22,7 +22,7 @@ public class Engine extends Canvas {
     public static boolean running = false;
     public static int width;
     public static int height;
-    private final String title;
+    private final String title, entities, boxes, lights;
     private final double tps;
     private final String cameraAttach;
     public static double scale;
@@ -56,11 +56,16 @@ public class Engine extends Canvas {
         width = (int)(Integer.parseInt(properties.getProperty("width", "800")) * scale);
         height = (int)(Integer.parseInt(properties.getProperty("height", "600")) * scale);
         title = properties.getProperty("title", "A Game");
+        entities = properties.getProperty("entities", "/");
+        boxes = properties.getProperty("boxes", "/");
+        lights = properties.getProperty("lights", "/");
         tps = Double.parseDouble(properties.getProperty("tps", "60"));
         cameraAttach = properties.getProperty("camera_attach", "");
         numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));
         baseLightLevel = 255 - Integer.parseInt(properties.getProperty("light_level", "250"));
         lightsEnabled = Boolean.parseBoolean(properties.getProperty("lights_enabled", "true"));
+        Dimension minimumSize = new Dimension(Integer.parseInt(properties.getProperty("min_width", "0")),
+                Integer.parseInt(properties.getProperty("min_height", "0")));
 
         // load entities, hitboxes, and lights
         loadEntities();
@@ -73,6 +78,7 @@ public class Engine extends Canvas {
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
         this.setPreferredSize(new Dimension(width, height));
+        this.setMinimumSize(minimumSize);
 
         physics = new Physics(entityList);
 
@@ -93,115 +99,118 @@ public class Engine extends Canvas {
 
     public void loadEntities() {
         // load entities from the game/entities directory
-        Path folderPath = Paths.get("game/entities");
-        try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
-            for(Path file : directoryStream) {
-                // for each file in the directory that is a regular file
-                if(Files.isRegularFile(file)) {
-                    Properties properties = new Properties();
-                    try {
-                        properties.load(new FileInputStream(file.toString()));
-                    } catch (IOException e) {
-                        System.out.println("Unable to load properties file for " + file);
-                    }
+        if(!Objects.equals(entities, "/")) {
+            Path folderPath = Paths.get(entities);
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
+                for (Path file : directoryStream) {
+                    // for each file in the directory that is a regular file
+                    if (Files.isRegularFile(file)) {
+                        Properties properties = new Properties();
+                        try {
+                            properties.load(new FileInputStream(file.toString()));
+                        } catch (IOException e) {
+                            System.out.println("Unable to load properties file for " + file);
+                        }
 
-                    // define the entity and set hte properties based on its config file
-                    Entity entity;
-                    try {
-                        // compile the entity linked in its properties file
-                        String codePath = properties.getProperty("code");
-                        codePath = codePath.substring(0, codePath.length() - 5).replace('/', '.');
-                        Class<?> playerClass = loadClass(codePath);
-                        entity = (Entity) playerClass.getDeclaredConstructor().newInstance();
-                        entity.setName(properties.getProperty("name"));
-                        entity.setPos(new Vec2(Double.parseDouble(properties.getProperty("pos_x", "0")), Double.parseDouble(properties.getProperty("pos_y", "0"))));
-                        entity.setSize(new Vec2(Double.parseDouble(properties.getProperty("size_x")), Double.parseDouble(properties.getProperty("size_y"))));
-                        String texture = properties.getProperty("texture");
-                        if(!Objects.isNull(texture))
-                            entity.setTexture(ImageIO.read(new File(texture)));
-                        entity.setCollidesWith(new ArrayList<>(Arrays.asList(properties.getProperty("collides_with", "").split(","))));
-                        if(Objects.equals(cameraAttach, properties.getProperty("name")))
-                            cameraEntity = entity;
-                        entity.setLayer(Integer.parseInt(properties.getProperty("layer", "-1")));
-                        entity.setIndex(entityList.size());
-                        entityList.add(entity);
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                        System.out.println("Error compiling " + properties.getProperty("name") + " class");
+                        // define the entity and set hte properties based on its config file
+                        Entity entity;
+                        try {
+                            // compile the entity linked in its properties file
+                            String codePath = properties.getProperty("code");
+                            codePath = codePath.substring(0, codePath.length() - 5).replace('/', '.');
+                            Class<?> playerClass = loadClass(codePath);
+                            entity = (Entity) playerClass.getDeclaredConstructor().newInstance();
+                            entity.setName(properties.getProperty("name"));
+                            entity.setPos(new Vec2(Double.parseDouble(properties.getProperty("pos_x", "0")), Double.parseDouble(properties.getProperty("pos_y", "0"))));
+                            entity.setSize(new Vec2(Double.parseDouble(properties.getProperty("size_x")), Double.parseDouble(properties.getProperty("size_y"))));
+                            String texture = properties.getProperty("texture");
+                            if (!Objects.isNull(texture))
+                                entity.setTexture(ImageIO.read(new File(texture)));
+                            entity.setCollidesWith(new ArrayList<>(Arrays.asList(properties.getProperty("collides_with", "").split(","))));
+                            if (Objects.equals(cameraAttach, properties.getProperty("name")))
+                                cameraEntity = entity;
+                            entity.setLayer(Integer.parseInt(properties.getProperty("layer", "-1")));
+                            entity.setIndex(entityList.size());
+                            entityList.add(entity);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("Error compiling " + properties.getProperty("name") + " class");
+                        }
                     }
                 }
+            } catch (IOException e) {
+                System.out.println("Error loading entity folder");
             }
-        } catch(IOException e) {
-            System.out.println("Error loading entity folder");
         }
     }
 
     private void loadBoxes() {
         // get the data for the hitboxes from the game/boxes directory
-        Path folderPath = Paths.get("game/boxes");
-        try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
-            for(Path file: directoryStream) {
-                if(Files.isRegularFile(file)) {
-                    // for each regular file in that directory, create a hitbox based on the properties
-                    Properties properties = new Properties();
-                    try {
-                        properties.load(new FileInputStream(file.toString()));
-                    }
-                    catch(IOException e) {
-                        System.out.println("Unable to load properties for " + properties.getProperty("name") + " hitbox");
-                    }
+        if(!Objects.equals(boxes, "/")) {
+            Path folderPath = Paths.get(boxes);
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
+                for (Path file : directoryStream) {
+                    if (Files.isRegularFile(file)) {
+                        // for each regular file in that directory, create a hitbox based on the properties
+                        Properties properties = new Properties();
+                        try {
+                            properties.load(new FileInputStream(file.toString()));
+                        } catch (IOException e) {
+                            System.out.println("Unable to load properties for " + properties.getProperty("name") + " hitbox");
+                        }
 
-                    int w = Integer.parseInt(properties.getProperty("size_x", "0"));
-                    int h = Integer.parseInt(properties.getProperty("size_y", "0"));
-                    int x = Integer.parseInt(properties.getProperty("pos_x", "0")) - w / 2;
-                    int y = Integer.parseInt(properties.getProperty("pos_y", "0")) - h / 2;
+                        int w = Integer.parseInt(properties.getProperty("size_x", "0"));
+                        int h = Integer.parseInt(properties.getProperty("size_y", "0"));
+                        int x = Integer.parseInt(properties.getProperty("pos_x", "0")) - w / 2;
+                        int y = Integer.parseInt(properties.getProperty("pos_y", "0")) - h / 2;
 
-                    String attach = properties.getProperty("attach");
-                    if(attach != null) {
-                        for (Entity entity : entityList) {
-                            if (Objects.equals(entity.getName(), attach)) {
-                                List<Hitbox> hitboxes = entity.getHitboxes();
-                                if(Objects.isNull(hitboxes)) {
-                                    hitboxes = new ArrayList<>();
-                                    hitboxes.add(new Hitbox(new Vec2(x + entity.getPos().x, y + entity.getPos().y), new Vec2(w, h)));
-                                    entity.setHitboxes(hitboxes);
+                        String attach = properties.getProperty("attach");
+                        if (attach != null) {
+                            for (Entity entity : entityList) {
+                                if (Objects.equals(entity.getName(), attach)) {
+                                    List<Hitbox> hitboxes = entity.getHitboxes();
+                                    if (Objects.isNull(hitboxes)) {
+                                        hitboxes = new ArrayList<>();
+                                        hitboxes.add(new Hitbox(new Vec2(x + entity.getPos().x, y + entity.getPos().y), new Vec2(w, h)));
+                                        entity.setHitboxes(hitboxes);
+                                    } else
+                                        entity.getHitboxes().add(new Hitbox(new Vec2(x + entity.getPos().x, y + entity.getPos().y), new Vec2(w, h)));
                                 }
-                                else
-                                    entity.getHitboxes().add(new Hitbox(new Vec2(x + entity.getPos().x, y + entity.getPos().y), new Vec2(w, h)));
                             }
                         }
                     }
                 }
+            } catch (IOException e) {
+                System.out.println("Error loading hitbox folder");
             }
-        } catch(IOException e) {
-            System.out.println("Error loading hitbox folder");
         }
     }
 
     private void loadLights() {
         // get the data for the lights from the game/lights directory
-        Path folderPath = Paths.get("game/lights");
-        try(DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
-            for(Path file: directoryStream) {
-                if(Files.isRegularFile(file)) {
-                    // for each regular file in that directory, create a hitbox based on the properties
-                    Properties properties = new Properties();
-                    try {
-                        properties.load(new FileInputStream(file.toString()));
-                    }
-                    catch(IOException e) {
-                        System.out.println("Unable to load properties for " + properties.getProperty("name") + " light");
-                    }
+        if(!Objects.equals(lights, "/")) {
+            Path folderPath = Paths.get(lights);
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
+                for (Path file : directoryStream) {
+                    if (Files.isRegularFile(file)) {
+                        // for each regular file in that directory, create a hitbox based on the properties
+                        Properties properties = new Properties();
+                        try {
+                            properties.load(new FileInputStream(file.toString()));
+                        } catch (IOException e) {
+                            System.out.println("Unable to load properties for " + properties.getProperty("name") + " light");
+                        }
 
-                    double posx = Double.parseDouble(properties.getProperty("pos_x", "0"));
-                    double posy = Double.parseDouble(properties.getProperty("pos_y", "0"));
-                    double radius = Double.parseDouble(properties.getProperty("radius", "10"));
-                    String attach = properties.getProperty("attach", "");
-                    Engine.lightList.add(new Light(new Vec2(posx, posy), radius, attach));
+                        double posx = Double.parseDouble(properties.getProperty("pos_x", "0"));
+                        double posy = Double.parseDouble(properties.getProperty("pos_y", "0"));
+                        double radius = Double.parseDouble(properties.getProperty("radius", "10"));
+                        String attach = properties.getProperty("attach", "");
+                        Engine.lightList.add(new Light(new Vec2(posx, posy), radius, attach));
+                    }
                 }
+            } catch (IOException e) {
+                System.out.println("Error loading light folder");
             }
-        } catch(IOException e) {
-            System.out.println("Error loading light folder");
         }
     }
 
