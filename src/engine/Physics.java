@@ -23,7 +23,7 @@ public record Physics(List<Entity> entities) {
                     for (Hitbox hitbox : entity.getHitboxes()) {
                         for (Hitbox collisionHitbox : collisionEntity.getHitboxes()) {
                             if (hitbox.intersects(collisionHitbox)) {
-                                if (entity.getCollidesWith().contains(collisionEntity.getName())) {
+                                if(entity.getCollidesWith().contains(collisionEntity.getName())) {
                                     // for all the hitboxes in each entity, check if they collide in the x and revert changes if they do
                                     entity.getPos().x = previousPos.x;
                                     for (Hitbox revert : entity.getHitboxes()) {
@@ -44,20 +44,21 @@ public record Physics(List<Entity> entities) {
                 hitbox.getPos().y += entity.getVelocity().y;
 
             for (Entity collisionEntity : entities) {
-                if (!Objects.equals(entity, collisionEntity) && entity.getCollidesWith().contains(collisionEntity.getName())) {
+                if (!Objects.equals(entity, collisionEntity)) {
                     for (Hitbox hitbox : entity.getHitboxes()) {
                         for (Hitbox collisionHitbox : collisionEntity.getHitboxes()) {
-                            if (hitbox.intersects(collisionHitbox)) {
-                                if (entity.getCollidesWith().contains(collisionEntity.getName())) {
+                            if(hitbox.intersects(collisionHitbox)) {
+                                if(entity.getCollidesWith().contains(collisionEntity.getName())) {
                                     // for all the hitboxes in each entity, check if they collide in the y and revert changes if they do
                                     entity.getPos().y = previousPos.y;
                                     for (Hitbox revert : entity.getHitboxes()) {
                                         revert.getPos().y -= entity.getVelocity().y;
                                     }
+
+                                    entity.getVelocity().y = 0;
                                 }
-                                entity.getVelocity().y = 0;
+                                entity.getLastCollision().add(collisionEntity);
                             }
-                            entity.getLastCollision().add(collisionEntity);
                         }
                     }
                 }

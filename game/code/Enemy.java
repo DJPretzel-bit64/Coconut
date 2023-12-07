@@ -13,6 +13,7 @@ public class Enemy extends BasicEntity {
 	public final Vec2 acceleration = new Vec2(0, -800);
 	public final double speed = 100;
 	String direction = "right";
+	private boolean lastPaused = false;
 
 	public Enemy(Vec2 pos) {
 		// set enemy data
@@ -36,17 +37,22 @@ public class Enemy extends BasicEntity {
 		double speed = this.speed * delta;
 
 		// if the velocity is 0 (i.e. it hit something) change direction
-		if(velocity.x == 0) {
+		if(velocity.x == 0 && !lastPaused) {
 			direction = Objects.equals(direction, "left") ? "right" : "left";
 		}
+
+		lastPaused = Collective.paused;
+
 		// move left or right based on their direction
 		if(Objects.equals(direction, "left"))
 			velocity.x = -speed;
 		if(Objects.equals(direction, "right"))
 			velocity.x = speed;
-
-		// update the velocity based on the acceleration
-		this.velocity = this.velocity.plus(this.acceleration.times(delta * delta));
+		if(Collective.paused)
+			velocity.x = 0;
+		else
+			// update the velocity based on the acceleration
+			this.velocity = this.velocity.plus(this.acceleration.times(delta * delta));
 	}
 
 	@Override

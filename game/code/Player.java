@@ -2,11 +2,13 @@ package game.code;
 
 import engine.*;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
 
@@ -25,7 +27,6 @@ public class Player extends BasicEntity {
     public Entity lastCollisionEntity;
     public int score = 0;
     public double cooldown;
-    public BufferedImage overlay;
     public final BufferedImage[] idleAni = new BufferedImage[aniLength];
     public final BufferedImage[] leftAni = new BufferedImage[aniLength];
     public final BufferedImage[] rightAni = new BufferedImage[aniLength];
@@ -39,8 +40,22 @@ public class Player extends BasicEntity {
     public Clip clip;
     public final Random random = new Random();
 
-    public Player() {
+    public Player(Vec2 pos) {
         // setup sounds and position
+        System.out.println(pos);
+        this.pos = pos;
+        name = "Player";
+        size = new Vec2(32, 32);
+        try {
+            texture = ImageIO.read(new File("game/res/player.png"));
+        } catch(IOException e) {
+            System.out.println("Error loading player textures");
+        }
+        setTexture();
+        hitboxes.add(new Hitbox(pos.minus(new Vec2(8, 16)), new Vec2(16, 30)));
+
+        collidesWith.add("World");
+        layer = 3;
         Collective.playerPos = pos;
         coffeeSound = new File("game/res/crunch.wav");
         slurpSound = new File("game/res/slurp.wav");
@@ -48,10 +63,8 @@ public class Player extends BasicEntity {
         playSound(coffeeSound);
     }
 
-    @Override
-    public void setTexture(BufferedImage texture) {
+    public void setTexture() {
         // get the texture animations
-        this.texture = texture;
         for(int i = 0; i < aniLength; i++) {
             rightAni[i] =       texture.getSubimage(0,   i * 32, 32, 32);
             leftAni[i] =        texture.getSubimage(32,  i * 32, 32, 32);
@@ -75,94 +88,95 @@ public class Player extends BasicEntity {
         double jumpSpeed = this.jumpSpeed * delta;
         int aniSpeed = (int) (0.1 / delta);
 
-        // if they press up and can jump, apply the jump velocity and don't let them jump again
-        if(input.up && canJump) {
-            velocity.y = jumpSpeed;
-            canJump = false;
-        }
+        if(!Collective.paused) {
+            // if they press up and can jump, apply the jump velocity and don't let them jump again
+            if (input.up && canJump) {
+                velocity.y = jumpSpeed;
+                canJump = false;
+            }
 
-        // check if the velocity is 0 and the player was falling, not jumping and set canJump to true
-        if(velocity.y == 0 && lastVelocity.y < 0)
-            canJump = true;
+            // check if the velocity is 0 and the player was falling, not jumping and set canJump to true
+            if (velocity.y == 0 && lastVelocity.y < 0)
+                canJump = true;
 
-        // set the velocity and player direction
-        if(input.left) {
-            velocity.x = -speed;
-            direction = velocity.y > 0 ? "up" : canJump ? "left" : "downLeft";
-        }
-        else if(input.right) {
-            velocity.x = speed;
-            direction = velocity.y > 0 ? "up" : canJump ? "right" : "downRight";
-        }
-        else {
-            velocity.x = 0;
-            direction = velocity.y == 0 ? "idle" : "up";
-        }
+            // set the velocity and player direction
+            if (input.left) {
+                velocity.x = -speed;
+                direction = velocity.y > 0 ? "up" : canJump ? "left" : "downLeft";
+            } else if (input.right) {
+                velocity.x = speed;
+                direction = velocity.y > 0 ? "up" : canJump ? "right" : "downRight";
+            } else {
+                velocity.x = 0;
+                direction = velocity.y == 0 ? "idle" : "up";
+            }
 
-        // increase the velocity by the acceleration
-        velocity = velocity.plus(acceleration.times(delta * delta));
+            // increase the velocity by the acceleration
+            velocity = velocity.plus(acceleration.times(delta * delta));
 
-        // if they fell, don't allow the player to jump
-        if(lastPos.y != pos.y)
-            canJump = false;
+            // if they fell, don't allow the player to jump
+            if (lastPos.y != pos.y)
+                canJump = false;
 
-        // update the last pos and velocity
-        lastPos = new Vec2(pos);
-        lastVelocity = new Vec2(velocity);
+            // update the last pos and velocity
+            lastPos = new Vec2(pos);
+            lastVelocity = new Vec2(velocity);
 
-        // check if the player is colliding with an enemy and reduce health and increase score
-        if(contains("Enemy")) {
-            playSound(slurpSound);
-            health--;
-            score++;
-            Engine.removeFromEntityList(lastCollisionEntity);
-            if(health == 0) {
-                System.out.println("You finished with " + score + " points!");
+            // check if the player is colliding with an enemy and reduce health and increase score
+            if (contains("Enemy")) {
+                playSound(slurpSound);
+                health--;
+                score++;
+                Engine.removeFromEntityList(lastCollisionEntity);
+                if (health == 0) {
+                    System.out.println("You finished with " + score + " points!");
+                    System.exit(0);
+                }
+            }
+
+            // check if the player is colliding with a bean and increase the health or the score
+            if (contains("Bean")) {
+                playSound(coffeeSound);
+                if (health == maxHealth)
+                    score++;
+                else
+                    health++;
+                Engine.removeFromEntityList(lastCollisionEntity);
+            }
+
+            // check if the player is colliding with a portal and teleport the player to a random one if they are
+            if (contains("Portal") && cooldown == 0) {
+                playSound(portalSound);
+                Entity entity;
+                do {
+                    entity = Engine.getEntityList().get(random.nextInt(Engine.getEntityList().size()));
+                } while (!Objects.equals(entity.getName(), "Portal") || entity.getIndex() == lastCollisionEntity.getIndex());
+
+                pos = new Vec2(entity.getPos());
+                hitboxes.get(0).setPos(new Vec2(entity.getPos().minus(new Vec2(8, 16))));
+                cooldown = 3;
+            }
+
+            // if they jump in the door, they win and the program ends
+            if (contains("Door") && input.up) {
+                System.out.println("YOU WON! You scored " + score + " points!");
                 System.exit(0);
             }
-        }
 
-        // check if the player is colliding with a bean and increase the health or the score
-        if(contains("Bean")) {
-            playSound(coffeeSound);
-            if(health == maxHealth)
-                score++;
-            else
-                health++;
-            Engine.removeFromEntityList(lastCollisionEntity);
+            // set the cooldown for going through portals
+            cooldown = cooldown < 0 ? 0 : cooldown - delta;
         }
-
-        // check if the player is colliding with a portal and teleport the player to a random one if they are
-        if(contains("Portal") && cooldown == 0) {
-            playSound(portalSound);
-            Entity entity;
-            do {
-                entity = Engine.getEntityList().get(random.nextInt(Engine.getEntityList().size()));
-            } while(!Objects.equals(entity.getName(), "Portal") || entity.getIndex() == lastCollisionEntity.getIndex());
-
-            pos = new Vec2(entity.getPos());
-            hitboxes.get(0).setPos(new Vec2(entity.getPos().minus(new Vec2(8, 16))));
-            cooldown = 3;
-        }
-
-        // if they jump in the door, they win and the program ends
-        if(contains("Door") && input.up) {
-            System.out.println("YOU WON! You scored " + score + " points!");
-            System.exit(0);
-        }
+        else
+            velocity = new Vec2();
 
         // increase the animation number and update the animation index once in a while
         aniNum++;
-        if(aniNum >= aniSpeed) {
+        if (aniNum >= aniSpeed) {
             aniNum = 0;
             Collective.aniIndex++;
             if (Collective.aniIndex >= aniLength)
                 Collective.aniIndex = 0;
         }
-
-        // set the cooldown for going through portals
-        cooldown = cooldown < 0 ? 0 : cooldown - delta;
-
     }
 
     @Override
@@ -181,7 +195,6 @@ public class Player extends BasicEntity {
             };
             renderer.draw(pos, size, healthAni[maxHealth - health], true);
             renderer.draw(pos, size, frame, true);
-            renderer.draw(pos, new Vec2(Engine.width, Engine.height).divide(3), overlay, true);
         }
         // render hitbox if the program is in wireframe or hitbox mode
         if(Collective.wireframe || Collective.hitboxes)

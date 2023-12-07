@@ -12,7 +12,7 @@ public class BasicEntity implements Entity, Serializable {
     public BufferedImage texture;
     public List<Hitbox> hitboxes = new ArrayList<>();
     public Vec2 velocity = new Vec2();
-    public List<Entity> lastCollision;
+    public List<Entity> lastCollision = new ArrayList<>();
     public List<String> collidesWith = new ArrayList<>();
     public int layer = -1;
     public int index;

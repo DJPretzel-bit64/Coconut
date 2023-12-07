@@ -2,10 +2,12 @@ package game.code;
 
 import engine.*;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,9 +20,19 @@ public class World extends BasicEntity {
     
     public World() {
         // set up the world
+        size = new Vec2(256, 32);
+        pos = new Vec2();
+        try {
+            texture = ImageIO.read(new File("game/res/world.png"));
+        } catch(IOException e) {
+            System.out.println("unable to load world texture");
+        }
+        layer = 0;
+        name = "World";
         hitboxes = new ArrayList<>();
         getRawWorld();
         setWorldHitbox();
+        setTexture();
     }
     
     private void calculateFancyWorld() {
@@ -61,11 +73,9 @@ public class World extends BasicEntity {
             }
         }
     }
-    
-    @Override
-    public void setTexture(BufferedImage texture) {
+
+    public void setTexture() {
         // override the set texture function to define different tile textures
-        this.texture = texture;
         NSEW = texture.getSubimage(0,  0 ,  32, 32);
         SEW  = texture.getSubimage(32, 0 ,  32, 32);
         NEW  = texture.getSubimage(32, 32,  32, 32);
@@ -109,7 +119,6 @@ public class World extends BasicEntity {
     @Override
     public void update(Input input, double delta) {
         // update the background combined image if the size of the window changed
-
         if(lastWidth != Engine.width || lastHeight != Engine.height) {
             // update the width and height variables
             lastWidth = Engine.width;
@@ -183,6 +192,7 @@ public class World extends BasicEntity {
         for(int j = 0; j < worldHeight; j++) {
             for(int i = 0; i < worldWidth; i++) {
 				switch (rawWorld[i][j]) {
+                    case 'p' -> Engine.addToEntityList(new Player(new Vec2(i * 32,  j * 32)));
 					case 'e' -> Engine.addToEntityList(new Enemy(new Vec2(i * 32, j * 32)));
 					case 'b' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32)));
                     case 'q' -> Engine.addToEntityList(new Portal(new Vec2(i * 32, j * 32)));

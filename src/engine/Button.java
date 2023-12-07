@@ -27,7 +27,7 @@ public class Button {
 		else hov = false;
 	}
 
-	public void render(Renderer renderer) {
-		renderer.draw(pos, size, hov ? hovered : normal, false);
+	public void render(Renderer renderer, Vec2 offset) {
+		renderer.draw(pos.plus(offset), size, hov ? hovered : normal, false);
 	}
 }

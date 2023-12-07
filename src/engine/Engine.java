@@ -34,14 +34,11 @@ public class Engine extends Canvas {
     private static final ArrayList<Entity> removeList = new ArrayList<>();
     private static final ArrayList<Entity> addList = new ArrayList<>();
     public static Vec2 cameraPos = new Vec2();
-    private Entity cameraEntity;
+    private Entity cameraEntity = new BasicEntity();
     private final int numLayers;
     private final int baseLightLevel;
-    private boolean paused = false;
-    private boolean escapeLast = false;
+    public static boolean lightsEnabled;
     private BufferedImage overlay = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
-    private BufferedImage menu, buttonTile, resumeNormal, resumeHovered, exitNormal, exitHovered;
-    private final ArrayList<Button> buttons = new ArrayList<>();
 
     public static void main(String[] args) {
         new Engine();
@@ -55,19 +52,15 @@ public class Engine extends Canvas {
         }catch(IOException e) {
             System.out.println("Unable to load launch.properties");
         }
-        width = Integer.parseInt(properties.getProperty("width", "800"));
-        height = Integer.parseInt(properties.getProperty("height", "600"));
+        scale = Double.parseDouble(properties.getProperty("scale", "1"));
+        width = (int)(Integer.parseInt(properties.getProperty("width", "800")) * scale);
+        height = (int)(Integer.parseInt(properties.getProperty("height", "600")) * scale);
         title = properties.getProperty("title", "A Game");
         tps = Double.parseDouble(properties.getProperty("tps", "60"));
-        scale = Double.parseDouble(properties.getProperty("scale", "1"));
         cameraAttach = properties.getProperty("camera_attach", "");
         numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));
         baseLightLevel = 255 - Integer.parseInt(properties.getProperty("light_level", "250"));
-
-        // initiate default pause menu buttons
-        getPauseTextures();
-        buttons.add(new Button(resumeNormal, resumeHovered, new Vec2(0, 14), new Vec2(64, 12), () -> paused = false));
-        buttons.add(new Button(exitNormal, exitHovered, new Vec2(0, -4), new Vec2(64, 12), () -> System.exit(0)));
+        lightsEnabled = Boolean.parseBoolean(properties.getProperty("lights_enabled", "true"));
 
         // load entities, hitboxes, and lights
         loadEntities();
@@ -121,9 +114,11 @@ public class Engine extends Canvas {
                         Class<?> playerClass = loadClass(codePath);
                         entity = (Entity) playerClass.getDeclaredConstructor().newInstance();
                         entity.setName(properties.getProperty("name"));
-                        entity.setPos(new Vec2(Double.parseDouble(properties.getProperty("x", "0")), Double.parseDouble(properties.getProperty("y", "0"))));
-                        entity.setSize(new Vec2(Double.parseDouble(properties.getProperty("width")), Double.parseDouble(properties.getProperty("height"))));
-                        entity.setTexture(Objects.requireNonNull(ImageIO.read(new File(properties.getProperty("texture")))));
+                        entity.setPos(new Vec2(Double.parseDouble(properties.getProperty("pos_x", "0")), Double.parseDouble(properties.getProperty("pos_y", "0"))));
+                        entity.setSize(new Vec2(Double.parseDouble(properties.getProperty("size_x")), Double.parseDouble(properties.getProperty("size_y"))));
+                        String texture = properties.getProperty("texture");
+                        if(!Objects.isNull(texture))
+                            entity.setTexture(ImageIO.read(new File(texture)));
                         entity.setCollidesWith(new ArrayList<>(Arrays.asList(properties.getProperty("collides_with", "").split(","))));
                         if(Objects.equals(cameraAttach, properties.getProperty("name")))
                             cameraEntity = entity;
@@ -156,10 +151,10 @@ public class Engine extends Canvas {
                         System.out.println("Unable to load properties for " + properties.getProperty("name") + " hitbox");
                     }
 
-                    int w = Integer.parseInt(properties.getProperty("width", "0"));
-                    int h = Integer.parseInt(properties.getProperty("height", "0"));
-                    int x = Integer.parseInt(properties.getProperty("x", "0")) - w / 2;
-                    int y = Integer.parseInt(properties.getProperty("y", "0")) - h / 2;
+                    int w = Integer.parseInt(properties.getProperty("size_x", "0"));
+                    int h = Integer.parseInt(properties.getProperty("size_y", "0"));
+                    int x = Integer.parseInt(properties.getProperty("pos_x", "0")) - w / 2;
+                    int y = Integer.parseInt(properties.getProperty("pos_y", "0")) - h / 2;
 
                     String attach = properties.getProperty("attach");
                     if(attach != null) {
@@ -198,8 +193,8 @@ public class Engine extends Canvas {
                         System.out.println("Unable to load properties for " + properties.getProperty("name") + " light");
                     }
 
-                    double posx = Double.parseDouble(properties.getProperty("posx", "0"));
-                    double posy = Double.parseDouble(properties.getProperty("posy", "0"));
+                    double posx = Double.parseDouble(properties.getProperty("pos_x", "0"));
+                    double posy = Double.parseDouble(properties.getProperty("pos_y", "0"));
                     double radius = Double.parseDouble(properties.getProperty("radius", "10"));
                     String attach = properties.getProperty("attach", "");
                     Engine.lightList.add(new Light(new Vec2(posx, posy), radius, attach));
@@ -257,6 +252,8 @@ public class Engine extends Canvas {
 
         // get the drawGraphics
         Graphics g = bs.getDrawGraphics();
+        g.setColor(Color.black);
+        g.fillRect(0, 0, width, height);
 
         // update the camera pos used
         cameraPos = cameraEntity.getPos();
@@ -270,12 +267,14 @@ public class Engine extends Canvas {
                 if(entity.getLayer() == i)
                     entity.render(renderer);
 
-        // render the light overlay
-        g.drawImage(overlay, 0, 0, width, height, null);
+        if(lightsEnabled)
+            // render the light overlay
+            g.drawImage(overlay, 0, 0, width, height, null);
 
-        // render the pause menu if the game is paused
-        if(paused)
-            renderPauseMenu(renderer);
+        // render entities that don't have a layer
+        for(Entity entity : entityList)
+            if(entity.getLayer() == -1)
+                entity.render(renderer);
 
         // apply the graphics context
         g.dispose();
@@ -287,34 +286,27 @@ public class Engine extends Canvas {
         width = this.getWidth();
         height = this.getHeight();
 
-        // update the light overlay
-        updateOverlay();
+        if(lightsEnabled)
+            // update the light overlay
+            updateOverlay();
 
-        // check if the escape key was pressed and pause the game
+        // update user input
         input.update(width, height, scale);
-        if(input.escape && !escapeLast)
-            paused = !paused;
-        escapeLast = input.escape;
 
-        // update the game if it's not paused
-        if(!paused) {
-            // update the user physics system
-            physics.update();
+        // update the user physics system
+        physics.update();
 
-            // update each entity
-            for (Entity entity : entityList) {
-                entity.update(input, delta);
+        // update each entity
+        for (Entity entity : entityList) {
+            entity.update(input, delta);
+            if(lightsEnabled)
                 for (Light light : lightList)
                     if (Objects.equals(light.attach, entity.getName()))
                         light.pos = new Vec2(entity.getPos());
-            }
-
-            // update the entity list based on items scheduled to be added or removed
-            updateEntityList();
         }
-        // otherwise update the pause menu
-        else
-            updatePauseMenu(input);
+
+        // update the entity list based on items scheduled to be added or removed
+        updateEntityList();
     }
 
     private void updateOverlay() {
@@ -354,39 +346,18 @@ public class Engine extends Canvas {
     private void updateEntityList() {
         // apply the updates from the add and remove lists, then clear the update lists
         for(Entity entity : removeList) {
+            if(Objects.equals(entity.getName(), cameraAttach)) {
+                cameraEntity = new BasicEntity();
+            }
             entityList.remove(entity);
         }
         for(Entity entity : addList) {
+            if(Objects.equals(entity.getName(), cameraAttach))
+                cameraEntity = entity;
             entityList.add(0, entity);
         }
         removeList.clear();
         addList.clear();
-    }
-
-    private void getPauseTextures() {
-        try {
-            menu = ImageIO.read(new File("game/res/pauseMenu.png"));
-            buttonTile = ImageIO.read(new File("game/res/buttons.png"));
-        }catch(IOException e) {
-            System.out.println("Error loading menu texture.");
-        }
-        resumeNormal = buttonTile.getSubimage(0, 0, 64, 12);
-        resumeHovered = buttonTile.getSubimage(0, 12, 64, 12);
-        exitNormal = buttonTile.getSubimage(0, 24, 64, 12);
-        exitHovered = buttonTile.getSubimage(0, 36, 64, 12);
-    }
-
-    private void updatePauseMenu(Input input) {
-        for(Button button : buttons) {
-            button.update(input);
-        }
-    }
-
-    private void renderPauseMenu(Renderer renderer) {
-        renderer.draw(new Vec2(), new Vec2(128, 96), menu, false);
-        for(Button button : buttons) {
-            button.render(renderer);
-        }
     }
 
     private static Class<?> loadClass(String className) throws Exception {
