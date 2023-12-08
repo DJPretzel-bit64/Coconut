@@ -37,6 +37,7 @@ public class LostMenu extends Menu {
 
 		this.buttons.add(new Button(exitNormal, exitHovered, new Vec2(-30, -20), new Vec2(40, 12), () -> System.exit(0)));
 		this.buttons.add(new Button(menuNormal, menuHovered, new Vec2(30, -20), new Vec2(40, 12), () -> {
+			visible = false;
 			Collective.mainMenu.setVisible(true);
 			Collective.paused = false;
 			Engine.lightsEnabled = false;

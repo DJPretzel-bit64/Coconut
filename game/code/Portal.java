@@ -19,7 +19,6 @@ public class Portal extends BasicEntity {
 		this.layer = 2;
 		this.pos = pos;
 		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(8, 16)), new Vec2(16, 32)));
-		Engine.lightList.add(new Light(pos, 2, ""));
 		this.name = "Portal";
 		try {
 			this.texture = ImageIO.read(new File("game/res/world.png"));

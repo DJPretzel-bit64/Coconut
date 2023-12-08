@@ -8,7 +8,9 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Objects;
 import java.util.Random;
 
@@ -160,6 +162,13 @@ public class Player extends BasicEntity {
             // if they jump in the door, they win and the program ends
             if (contains("Door") && input.up) {
                 Collective.score = score;
+                Collective.furthestLevel = Collective.currentLevel + 1;
+                File file = new File("game/res/progress.dat");
+                try (Writer writer = new FileWriter(file)) {
+                    writer.write(Collective.furthestLevel);
+                } catch(IOException e) {
+                    System.out.println("Error saving progress");
+                }
                 Collective.wonMenu.setVisible(true);
             }
 

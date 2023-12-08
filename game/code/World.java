@@ -17,8 +17,9 @@ public class World extends BasicEntity {
     char[][] rawWorld;
     BufferedImage[][] fancyWorld;
     int worldWidth, worldHeight, totalWidth, totalHeight, lastWidth, lastHeight;
+    String world;
     
-    public World() {
+    public World(String world) {
         // set up the world
         size = new Vec2(256, 32);
         pos = new Vec2();
@@ -30,6 +31,7 @@ public class World extends BasicEntity {
         layer = 0;
         name = "World";
         hitboxes = new ArrayList<>();
+        this.world = world;
         getRawWorld();
         setWorldHitbox();
         setTexture();
@@ -156,8 +158,8 @@ public class World extends BasicEntity {
     }
 
     private void getRawWorld() {
-        // load the world.dat file into a char[][]
-        try(Scanner scanner = new Scanner(new File("game/res/world.dat"))) {
+        // load the world1.dat file into a char[][]
+        try(Scanner scanner = new Scanner(new File("game/res/world" + world + ".dat"))) {
             String value = "";
             int num = 0;
             for(char character : scanner.nextLine().toCharArray()) {
@@ -183,7 +185,7 @@ public class World extends BasicEntity {
                 }
             }
         } catch(FileNotFoundException e) {
-            System.out.println("Unable to load world.dat file");
+            System.out.println("Unable to load world1.dat file");
         }
     }
 

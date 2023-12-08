@@ -1,8 +1,6 @@
 package game.code;
 
-import engine.BasicEntity;
-import engine.Hitbox;
-import engine.Vec2;
+import engine.*;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -19,6 +17,7 @@ public class Door extends BasicEntity {
 		this.pos = pos;
 		this.hitboxes.add(new Hitbox(pos.minus(new Vec2(16, 16)), new Vec2(32, 32)));
 		this.name = "Door";
+		Engine.lightList.add(new Light(pos, 2, ""));
 		try {
 			this.texture = ImageIO.read(new File("game/res/world.png")).getSubimage(96, 128, 32, 32);
 		} catch(IOException e) {

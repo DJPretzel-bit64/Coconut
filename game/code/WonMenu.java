@@ -32,12 +32,15 @@ public class WonMenu extends Menu {
 		BufferedImage exitHovered = buttonTextures.getSubimage(0, 36, 40, 12);
 		BufferedImage menuNormal = buttonTextures.getSubimage(0, 72, 40, 12);
 		BufferedImage menuHovered = buttonTextures.getSubimage(0, 84, 40, 12);
+		BufferedImage nextNormal = buttonTextures.getSubimage(0, 96, 40, 12);
+		BufferedImage nextHovered = buttonTextures.getSubimage(0, 108, 40, 12);
 
 		for(int i = 0; i < 10; i++)
 			numbers[i] = numberSprite.getSubimage(i * 9, 0, 9, 12);
 
-		this.buttons.add(new Button(exitNormal, exitHovered, new Vec2(-30, -20), new Vec2(40, 12), () -> System.exit(0)));
-		this.buttons.add(new Button(menuNormal, menuHovered, new Vec2(30, -20), new Vec2(40, 12), () -> {
+		this.buttons.add(new Button(exitNormal, exitHovered, new Vec2(-30, -30), new Vec2(40, 12), () -> System.exit(0)));
+		this.buttons.add(new Button(menuNormal, menuHovered, new Vec2(30, -30), new Vec2(40, 12), () -> {
+			visible = false;
 			Collective.mainMenu.setVisible(true);
 			Collective.paused = false;
 			Engine.lightsEnabled = false;
@@ -46,6 +49,20 @@ public class WonMenu extends Menu {
 					Engine.removeFromEntityList(entity);
 			}
 			Engine.lightList.clear();
+		}));
+		this.buttons.add(new Button(nextNormal, nextHovered, new Vec2(0, -16), new Vec2(40, 12), () -> {
+			visible = false;
+			for(Entity entity : Engine.getEntityList()) {
+				if(! (entity instanceof Menu))
+					Engine.removeFromEntityList(entity);
+			}
+			Engine.lightList.clear();
+
+			Collective.paused = false;
+			Collective.running = true;
+			visible = false;
+			Collective.currentLevel++;
+			Engine.addToEntityList(new World("" + Collective.currentLevel));
 		}));
 	}
 
@@ -93,5 +110,12 @@ public class WonMenu extends Menu {
 				button.render(renderer, pos);
 			}
 		}
+	}
+
+	@Override
+	public void update(Input input, double delta) {
+		super.update(input, delta);
+		if(Collective.furthestLevel == Collective.numLevels)
+			this.buttons.get(2).setEnabled(false);
 	}
 }

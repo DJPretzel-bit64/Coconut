@@ -27,7 +27,7 @@ public class Engine extends Canvas {
     private final String cameraAttach;
     public static double scale;
     private final Renderer renderer;
-    private final Input input = new Input();
+    public static Input input = new Input();
     private final Physics physics;
     private static final ArrayList<Entity> entityList = new ArrayList<>();
     public static final ArrayList<Light> lightList = new ArrayList<>();
@@ -328,9 +328,9 @@ public class Engine extends Canvas {
         overlayGraphics.setColor(new Color(0, 0, 0, baseLightLevel));
         overlayGraphics.fillRect(0, 0, imageWidth, imageHeight);
 
-        for (Light light : lightList) {
-            for (int i = 0; i < imageWidth; i++) {
-                for (int j = 0; j < imageHeight; j++) {
+        for (int i = 0; i < imageWidth; i++) {
+            for (int j = 0; j < imageHeight; j++) {
+                for (Light light : lightList) {
                     // calculate the light level of the pixel based on the length to the player
                     Vec2 point = new Vec2(i, -j).plus(cameraPos).minus(new Vec2(imageWidth / 2., -imageHeight / 2.));
                     double length = light.pos.minus(point).lengthSquared() / (light.radius * light.radius);
