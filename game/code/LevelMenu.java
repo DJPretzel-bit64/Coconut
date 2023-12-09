@@ -23,7 +23,7 @@ public class LevelMenu extends Menu {
 			System.out.println("Error loading pauseMenu textures");
 		}
 
-		for(int i = 0; i < Collective.numLevels; i++) {
+		for(int i = 0; i <= Collective.numLevels; i++) {
 			BufferedImage normal = numbers.getSubimage(i * 9, 0, 9, 12);
 			BufferedImage hovered = numbers.getSubimage(i * 9, 12, 9, 12);
 			int finalI = i;
@@ -57,7 +57,7 @@ public class LevelMenu extends Menu {
 			}
 		}
 		if(Collective.furthestLevel != lastFurthest) {
-			for(int i = 0; i <= Collective.furthestLevel; i++)
+			for(int i = 0; i <= Collective.furthestLevel - 1; i++)
 				buttons.get(i).setEnabled(true);
 			lastFurthest = Collective.furthestLevel;
 		}

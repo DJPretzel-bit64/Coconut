@@ -24,6 +24,8 @@ public interface Entity {
     void setLayer(int priority);
     int getIndex();
     void setIndex(int index);
+    double getMass();
+    void setMass(double mass);
     void update(Input input, double delta);
     void render(Renderer renderer);
 }

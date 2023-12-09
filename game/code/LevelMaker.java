@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class LevelMaker extends JFrame {
-    int levelWidth = 20, levelHeight = 20;
+    int levelWidth = 10, levelHeight = 10;
     int buttonSize = 32;
     char[][] level = new char[levelWidth][levelHeight];
 

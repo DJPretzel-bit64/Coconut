@@ -14,5 +14,5 @@ public class Collective {
     public static int score;
     public static int furthestLevel = 0;
     public static int currentLevel;
-    public static int numLevels = 6;
+    public static int numLevels = 5;
 }

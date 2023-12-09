@@ -83,6 +83,9 @@ public class Engine extends Canvas {
         physics = new Physics(entityList);
 
         frame = new JFrame(title);
+        try {
+            frame.setIconImage(ImageIO.read(new File("game/res/cover.png")));
+        } catch(IOException ignored) {}
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
         frame.addKeyListener(input);

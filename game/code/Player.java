@@ -55,8 +55,10 @@ public class Player extends BasicEntity {
         setTexture();
         hitboxes.add(new Hitbox(pos.minus(new Vec2(8, 16)), new Vec2(16, 30)));
         Engine.lightList.add(new Light(pos, 4, "Player"));
+        this.mass = 1;
 
         collidesWith.add("World");
+        collidesWith.add("Movable");
         layer = 3;
         Collective.playerPos = pos;
         coffeeSound = new File("game/res/crunch.wav");

@@ -16,6 +16,7 @@ public class BasicEntity implements Entity, Serializable {
     public List<String> collidesWith = new ArrayList<>();
     public int layer = -1;
     public int index;
+    public double mass = -1;
 
     @Override
     public String getName() {
@@ -115,6 +116,16 @@ public class BasicEntity implements Entity, Serializable {
     @Override
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public double getMass() {
+        return this.mass;
+    }
+
+    @Override
+    public void setMass(double mass) {
+        this.mass = mass;
     }
 
     @Override

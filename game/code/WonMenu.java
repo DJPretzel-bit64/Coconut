@@ -115,7 +115,7 @@ public class WonMenu extends Menu {
 	@Override
 	public void update(Input input, double delta) {
 		super.update(input, delta);
-		if(Collective.furthestLevel == Collective.numLevels)
+		if(Collective.currentLevel == Collective.numLevels)
 			this.buttons.get(2).setEnabled(false);
 	}
 }
