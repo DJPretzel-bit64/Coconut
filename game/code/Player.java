@@ -55,7 +55,7 @@ public class Player extends BasicEntity {
         setTexture();
         hitboxes.add(new Hitbox(pos.minus(new Vec2(8, 16)), new Vec2(16, 30)));
         Engine.lightList.add(new Light(pos, 4, "Player"));
-        this.mass = 1;
+        this.mass = -1;
 
         collidesWith.add("World");
         collidesWith.add("Movable");
@@ -140,6 +140,7 @@ public class Player extends BasicEntity {
 
             // check if the player is colliding with a bean and increase the health or the score
             if (contains("Bean")) {
+                mass = 1;
                 playSound(coffeeSound);
                 if (health == maxHealth)
                     score++;
@@ -164,7 +165,7 @@ public class Player extends BasicEntity {
             // if they jump in the door, they win and the program ends
             if (contains("Door") && input.up) {
                 Collective.score = score;
-                Collective.furthestLevel = Collective.currentLevel + 1;
+                Collective.furthestLevel = Math.max(Collective.currentLevel + 1, Collective.furthestLevel);
                 File file = new File("game/res/progress.dat");
                 try (Writer writer = new FileWriter(file)) {
                     writer.write(Collective.furthestLevel);

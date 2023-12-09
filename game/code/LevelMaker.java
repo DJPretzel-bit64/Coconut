@@ -59,6 +59,7 @@ public class LevelMaker extends JFrame {
                     case 'p' -> Color.BLUE;
                     case 'd' -> Color.CYAN;
                     case 'q' -> Color.PINK;
+                    case 'm' -> new Color(100, 0, 100);
                     default -> Color.WHITE;
                 });
             }

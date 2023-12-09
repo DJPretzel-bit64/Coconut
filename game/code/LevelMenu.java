@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class LevelMenu extends Menu {
 	BufferedImage numbers;
-	int lastFurthest = 0;
+	int lastFurthest = -1;
 
 	public LevelMenu() {
 		Collective.levelMenu = this;
@@ -27,14 +27,14 @@ public class LevelMenu extends Menu {
 			BufferedImage normal = numbers.getSubimage(i * 9, 0, 9, 12);
 			BufferedImage hovered = numbers.getSubimage(i * 9, 12, 9, 12);
 			int finalI = i;
-			Button button = new Button(normal, hovered, new Vec2(12 * (i - 2.5), 12), new Vec2(9, 12), () -> {
+			Button button = new Button(normal, hovered, new Vec2(12 * (i - 0.5 * Collective.numLevels), 12), new Vec2(9, 12), () -> {
 				Collective.running = true;
 				visible = false;
 				Engine.lightsEnabled = true;
 				Collective.currentLevel = finalI;
 				Engine.addToEntityList(new World("" + finalI));
 			});
-			if(i > Collective.furthestLevel)
+			if(i >= Collective.furthestLevel)
 				button.setEnabled(false);
 			this.buttons.add(button);
 		}
@@ -57,7 +57,7 @@ public class LevelMenu extends Menu {
 			}
 		}
 		if(Collective.furthestLevel != lastFurthest) {
-			for(int i = 0; i <= Collective.furthestLevel - 1; i++)
+			for(int i = 0; i <= Collective.furthestLevel; i++)
 				buttons.get(i).setEnabled(true);
 			lastFurthest = Collective.furthestLevel;
 		}
