@@ -1,6 +1,6 @@
 package game.code;
 
-import engine.*;
+import Coconut.*;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -18,8 +18,8 @@ public class Player extends BasicEntity {
     public final Vec2 acceleration = new Vec2(0, -800);
     public Vec2 lastPos = new Vec2();
     public Vec2 lastVelocity = new Vec2();
-    public final double speed = 120;
-    public final double jumpSpeed = 280;
+    public double speed = 120;
+    public double jumpSpeed = 280;
     public boolean canJump = true;
     public String direction = "left";
     public final int maxHealth = 8;
@@ -140,7 +140,12 @@ public class Player extends BasicEntity {
 
             // check if the player is colliding with a bean and increase the health or the score
             if (contains("Bean")) {
-                mass = 1;
+                switch(((Bean)lastCollisionEntity).power) {
+                    case 'm' -> mass = 1;
+                    case 's' -> this.speed = 180;
+                    case 'j' -> this.jumpSpeed = 330;
+                    default -> {}
+                }
                 playSound(coffeeSound);
                 if (health == maxHealth)
                     score++;

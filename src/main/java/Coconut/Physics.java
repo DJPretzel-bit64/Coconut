@@ -1,4 +1,4 @@
-package engine;
+package Coconut;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ public record Physics(List<Entity> entities) {
                                         for (Hitbox revert : entity.getHitboxes()) {
                                             revert.getPos().x -= entity.getVelocity().x * entity.getMass() / collisionEntity.getMass();
                                         }
+                                        collisionEntity.getVelocity().x = 0;
                                     }
                                     else {
                                         entity.getPos().x = previousPos.x;
@@ -89,6 +90,7 @@ public record Physics(List<Entity> entities) {
                                         for (Hitbox revert : entity.getHitboxes()) {
                                             revert.getPos().y -= entity.getVelocity().y * entity.getMass() / collisionEntity.getMass();
                                         }
+                                        collisionEntity.getVelocity().y = 0;
                                     }
                                     else {
                                         entity.getPos().y = previousPos.y;

@@ -1,4 +1,4 @@
-package engine;
+package Coconut;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -120,9 +120,13 @@ public class Engine extends Canvas {
                         try {
                             // compile the entity linked in its properties file
                             String codePath = properties.getProperty("code");
-                            codePath = codePath.substring(0, codePath.length() - 5).replace('/', '.');
-                            Class<?> playerClass = loadClass(codePath);
-                            entity = (Entity) playerClass.getDeclaredConstructor().newInstance();
+                            if(codePath == null)
+                                entity = new BasicEntity();
+                            else {
+                                codePath = codePath.substring(0, codePath.length() - 5).replace('/', '.');
+                                Class<?> playerClass = loadClass(codePath);
+                                entity = (Entity) playerClass.getDeclaredConstructor().newInstance();
+                            }
                             entity.setName(properties.getProperty("name"));
                             entity.setPos(new Vec2(Double.parseDouble(properties.getProperty("pos_x", "0")), Double.parseDouble(properties.getProperty("pos_y", "0"))));
                             entity.setSize(new Vec2(Double.parseDouble(properties.getProperty("size_x")), Double.parseDouble(properties.getProperty("size_y"))));
@@ -134,6 +138,7 @@ public class Engine extends Canvas {
                                 cameraEntity = entity;
                             entity.setLayer(Integer.parseInt(properties.getProperty("layer", "-1")));
                             entity.setIndex(entityList.size());
+                            entity.setMass(Integer.parseInt(properties.getProperty("mass", "-1")));
                             entityList.add(entity);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -162,10 +167,10 @@ public class Engine extends Canvas {
                             System.out.println("Unable to load properties for " + properties.getProperty("name") + " hitbox");
                         }
 
-                        int w = Integer.parseInt(properties.getProperty("size_x", "0"));
-                        int h = Integer.parseInt(properties.getProperty("size_y", "0"));
-                        int x = Integer.parseInt(properties.getProperty("pos_x", "0")) - w / 2;
-                        int y = Integer.parseInt(properties.getProperty("pos_y", "0")) - h / 2;
+                        double w = Double.parseDouble(properties.getProperty("size_x", "0"));
+                        double h = Double.parseDouble(properties.getProperty("size_y", "0"));
+                        double x = Double.parseDouble(properties.getProperty("pos_x", "0")) - w / 2;
+                        double y = Double.parseDouble(properties.getProperty("pos_y", "0")) - h / 2;
 
                         String attach = properties.getProperty("attach");
                         if (attach != null) {

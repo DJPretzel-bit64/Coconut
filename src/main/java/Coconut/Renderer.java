@@ -1,10 +1,10 @@
-package engine;
+package Coconut;
 
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import static engine.Engine.*;
+import static Coconut.Engine.*;
 
 public class Renderer {
     Graphics g;

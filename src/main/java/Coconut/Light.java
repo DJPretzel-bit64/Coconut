@@ -1,4 +1,4 @@
-package engine;
+package Coconut;
 
 public class Light {
 	public Vec2 pos;

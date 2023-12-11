@@ -1,7 +1,7 @@
 package game.code;
 
-import engine.Menu;
-import engine.Vec2;
+import Coconut.Menu;
+import Coconut.Vec2;
 
 public class Collective {
     // accessible data from entity classes

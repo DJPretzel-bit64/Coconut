@@ -1,8 +1,8 @@
 package game.code;
 
-import engine.*;
-import engine.Button;
-import engine.Menu;
+import Coconut.*;
+import Coconut.Button;
+import Coconut.Menu;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -9,5 +9,8 @@
         <module name="Coconut" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CoconutMaven" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

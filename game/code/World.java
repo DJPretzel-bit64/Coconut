@@ -1,6 +1,6 @@
 package game.code;
 
-import engine.*;
+import Coconut.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -196,7 +196,10 @@ public class World extends BasicEntity {
 				switch (rawWorld[i][j]) {
                     case 'p' -> Engine.addToEntityList(new Player(new Vec2(i * 32,  j * 32)));
 					case 'e' -> Engine.addToEntityList(new Enemy(new Vec2(i * 32, j * 32)));
-					case 'b' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32)));
+					case 'b' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32), ' '));
+                    case '!' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32), 'm'));
+                    case '@' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32), 's'));
+                    case '#' -> Engine.addToEntityList(new Bean(new Vec2(i * 32, j * 32), 'j'));
                     case 'q' -> Engine.addToEntityList(new Portal(new Vec2(i * 32, j * 32)));
                     case 'd' -> Engine.addToEntityList(new Door(new Vec2(i * 32, j * 32)));
                     case 'm' -> Engine.addToEntityList(new Movable(new Vec2(i * 32, j * 32)));

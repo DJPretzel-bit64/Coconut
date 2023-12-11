@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import engine.*;
-import engine.Button;
-import engine.Menu;
+import Coconut.*;
+import Coconut.Button;
+import Coconut.Menu;
 
 public class WonMenu extends Menu {
 	private BufferedImage numberSprite;

@@ -1,4 +1,4 @@
-package engine;
+package Coconut;
 
 public class Vec2 {
     // store x and y doubles
@@ -42,7 +42,8 @@ public class Vec2 {
     }
 
     public Vec2 normal() {
-        return this.divide(this.length());
+        double length = this.length();
+        return length != 0 ? this.divide(length) : this;
     }
 
     public double lengthSquared() {

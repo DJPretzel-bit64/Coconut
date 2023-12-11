@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import engine.*;
+import Coconut.*;
 
 public class MainMenu extends Menu {
 	public MainMenu() {
