@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Coconut.iml" filepath="$PROJECT_DIR$/Coconut.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Coconut.iml" filepath="$PROJECT_DIR$/.idea/Coconut.iml" />
     </modules>
   </component>
 </project>
