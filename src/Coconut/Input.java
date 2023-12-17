@@ -6,7 +6,9 @@ import java.awt.event.*;
 public class Input implements KeyListener, MouseListener, MouseMotionListener {
     // define accessible content
     private final boolean[] keys = new boolean[66568];
-    public boolean left, right, up, down, escape, mouse;
+    @Deprecated
+    public boolean left, right, up, down, escape;
+    public boolean mouse;
     public Vec2 mousePos = new Vec2();
     private int width, height;
     private double scale;
@@ -23,6 +25,9 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
         up = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP] || keys[KeyEvent.VK_SPACE];
         down = keys[KeyEvent.VK_R] || keys[KeyEvent.VK_DOWN];
         escape = keys[KeyEvent.VK_ESCAPE];
+    }
+    public boolean getKeyEvent(int keyEvent) {
+        return keys[keyEvent];
     }
     @Override
     public void keyTyped(KeyEvent e) {}
