@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Coconut1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/Coconut_jar/Coconut.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
