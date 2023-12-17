@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+  </component>
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Coconut:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="debugging stuff again">
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Coconut_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Coconut_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Bean.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Collective.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Door.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Enemy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/LevelMaker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/LevelMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/LostMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/MainMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Movable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/PauseMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Player.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/Portal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/WonMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/code/World.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/entities/levelMenu.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/entities/lostMenu.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/entities/mainMenu.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/entities/pauseMenu.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/entities/wonMenu.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/launch.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/beans.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/block.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/buttons.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/cover.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/crunch.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/enemy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/lostMenu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/mainMenu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/numbers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/pauseMenu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/player.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/portal.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/slurp.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/wonMenu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world0.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world1.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world2.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world3.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world4.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world5.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/res/world6.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Coconut/Physics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Physics.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/game/entities/code/Player.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2Z1uh5Aym2CYqmQAQ8lsoLzrRCy" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/code/Player.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.14166667&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/entities/code/Portal.java&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut" />
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\res" />
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities" />
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\lights" />
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities\res" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Coconut" />
+      <recent name="game.code" />
+      <recent name="engine" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="LevleMaker" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="game.code.LevelMaker" />
+      <module name="Coconut" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Coconut.Engine" />
+      <module name="Coconut" />
+      <option name="PROGRAM_PARAMETERS" value="--enable-preview" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.LevleMaker" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.GLFW" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="" />
+      <created>1701602022268</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1701602022268</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Fixed a lot of physics stuff">
+      <option name="closed" value="true" />
+      <created>1701672493770</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1701672493770</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed frame stability issues">
+      <option name="closed" value="true" />
+      <created>1701675013082</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1701675013082</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added layer support">
+      <option name="closed" value="true" />
+      <created>1701679575400</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1701679575400</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Finished cloning CoffeeQuest game!">
+      <option name="closed" value="true" />
+      <created>1701687748818</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1701687748818</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Made the game around 6 times faster by combining world and background images into single image">
+      <option name="closed" value="true" />
+      <created>1701691057885</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1701691057885</updated>
+    </task>
+    <task id="LOCAL-00006" summary="commented most of the code">
+      <option name="closed" value="true" />
+      <created>1701739493917</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1701739493917</updated>
+    </task>
+    <task id="LOCAL-00007" summary="removed the unnecessary sync function which increased performance by 50%">
+      <option name="closed" value="true" />
+      <created>1701739984474</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1701739984474</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added light engine">
+      <option name="closed" value="true" />
+      <created>1701749858688</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1701749858688</updated>
+    </task>
+    <task id="LOCAL-00009" summary="made light engine faster">
+      <option name="closed" value="true" />
+      <created>1701857681263</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1701857681263</updated>
+    </task>
+    <task id="LOCAL-00010" summary="made portal hitboxes 16 px wide instead of 32">
+      <option name="closed" value="true" />
+      <created>1701857902465</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1701857902465</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added a pause menu and also restructured the directories">
+      <option name="closed" value="true" />
+      <created>1701864751516</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1701864751516</updated>
+    </task>
+    <task id="LOCAL-00012" summary="added a main menu which only loads things when the game starts">
+      <option name="closed" value="true" />
+      <created>1701948188599</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701948188599</updated>
+    </task>
+    <task id="LOCAL-00013" summary="removed an unused file">
+      <option name="closed" value="true" />
+      <created>1701948220330</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1701948220330</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added a good menu and end screen">
+      <option name="closed" value="true" />
+      <created>1701954693929</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1701954693929</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added multiple levels and a level menu">
+      <option name="closed" value="true" />
+      <created>1702022690571</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1702022690571</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Added dynamic objects">
+      <option name="closed" value="true" />
+      <created>1702092050555</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1702092050555</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Fixed some stuff">
+      <option name="closed" value="true" />
+      <created>1702094504870</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1702094504870</updated>
+    </task>
+    <task id="LOCAL-00018" summary="debugging stuff">
+      <option name="closed" value="true" />
+      <created>1702338022029</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1702338022029</updated>
+    </task>
+    <task id="LOCAL-00019" summary="debugging stuff again">
+      <option name="closed" value="true" />
+      <created>1702390348900</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1702390348900</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Fixed a lot of physics stuff" />
+    <MESSAGE value="Fixed frame stability issues" />
+    <MESSAGE value="Added layer support" />
+    <MESSAGE value="Finished cloning CoffeeQuest game!" />
+    <MESSAGE value="Made the game around 6 times faster by combining world and background images into single image" />
+    <MESSAGE value="commented most of the code" />
+    <MESSAGE value="removed the unnecessary sync function which increased performance by 50%" />
+    <MESSAGE value="added light engine" />
+    <MESSAGE value="made light engine faster" />
+    <MESSAGE value="made portal hitboxes 16 px wide instead of 32" />
+    <MESSAGE value="added a pause menu and also restructured the directories" />
+    <MESSAGE value="added a main menu which only loads things when the game starts" />
+    <MESSAGE value="removed an unused file" />
+    <MESSAGE value="Added a good menu and end screen" />
+    <MESSAGE value="Added multiple levels and a level menu" />
+    <MESSAGE value="Added dynamic objects" />
+    <MESSAGE value="Fixed some stuff" />
+    <MESSAGE value="debugging stuff" />
+    <MESSAGE value="debugging stuff again" />
+    <option name="LAST_COMMIT_MESSAGE" value="debugging stuff again" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/game/code/Player.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Coconut$Main.ic" NAME="Main Coverage Results" MODIFIED="1701666205216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
