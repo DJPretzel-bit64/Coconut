@@ -1,7 +1,7 @@
 package Coconut;
 
 public class Timer {
-	private long start;
+	private long start = -1;
 	private long duration = 0;
 
 	public Timer() {}
@@ -19,6 +19,9 @@ public class Timer {
 	}
 
 	public boolean isExpired() {
-		return System.currentTimeMillis() - start > duration;
+		if(start != -1)
+			return System.currentTimeMillis() - start > duration;
+		else
+			return true;
 	}
 }
