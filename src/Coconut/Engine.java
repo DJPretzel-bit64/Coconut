@@ -363,14 +363,15 @@ public class Engine extends Canvas {
     private void updateEntityList() {
         // apply the updates from the add and remove lists, then clear the update lists
         for(Entity entity : removeList) {
-            if(Objects.equals(entity.getName(), cameraAttach)) {
-                cameraEntity = new BasicEntity();
-            }
+            if(entity.getName() != null)
+                if(Objects.equals(entity.getName(), cameraAttach))
+                    cameraEntity = new BasicEntity();
             entityList.remove(entity);
         }
         for(Entity entity : addList) {
-            if(Objects.equals(entity.getName(), cameraAttach))
-                cameraEntity = entity;
+            if(entity.getName() != null)
+                if(Objects.equals(entity.getName(), cameraAttach))
+                    cameraEntity = entity;
             entityList.add(0, entity);
         }
         removeList.clear();
