@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.List;
 
 public class Engine extends Canvas {
     private final JFrame frame;
@@ -73,7 +72,7 @@ public class Engine extends Canvas {
         loadLights();
 
         // setup basic window stuff
-        renderer = new Renderer(scale);
+        renderer = new Renderer();
         this.addKeyListener(input);
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
@@ -123,7 +122,7 @@ public class Engine extends Canvas {
                             if(codePath == null)
                                 entity = new BasicEntity();
                             else {
-                                codePath = codePath.substring(0, codePath.length() - 5).replace('/', '.');
+                                codePath = codePath.replace('/', '.');
                                 Class<?> playerClass = loadClass(codePath);
                                 entity = (Entity) playerClass.getDeclaredConstructor().newInstance();
                             }
@@ -167,23 +166,49 @@ public class Engine extends Canvas {
                             System.out.println("Unable to load properties for " + properties.getProperty("name") + " hitbox");
                         }
 
-                        double w = Double.parseDouble(properties.getProperty("size_x", "0"));
-                        double h = Double.parseDouble(properties.getProperty("size_y", "0"));
-                        double x = Double.parseDouble(properties.getProperty("pos_x", "0")) - w / 2;
-                        double y = Double.parseDouble(properties.getProperty("pos_y", "0")) - h / 2;
-
+                        boolean box = Boolean.parseBoolean(properties.getProperty("box", "true"));
                         String attach = properties.getProperty("attach");
                         if (attach != null) {
-                            for (Entity entity : entityList) {
-                                if (Objects.equals(entity.getName(), attach)) {
-                                    List<Hitbox> hitboxes = entity.getHitboxes();
-                                    if (Objects.isNull(hitboxes)) {
-                                        hitboxes = new ArrayList<>();
-                                        hitboxes.add(new Hitbox(new Vec2(x + entity.getPos().x, y + entity.getPos().y), new Vec2(w, h)));
-                                        entity.setHitboxes(hitboxes);
-                                    } else
-                                        entity.getHitboxes().add(new Hitbox(new Vec2(x + entity.getPos().x, y + entity.getPos().y), new Vec2(w, h)));
+                            Entity attachEntity = new BasicEntity();
+                            for (Entity entity : entityList)
+                                if(Objects.equals(entity.getName(), attach))
+                                    attachEntity = entity;
+                            if (!box) {
+                                String[] xPointsRaw = properties.getProperty("x_points").split(",");
+                                String[] yPointsRaw = properties.getProperty("y_points").split(",");
+
+                                int xLength = xPointsRaw.length;
+                                int yLength = yPointsRaw.length;
+
+                                assert xLength == yLength;
+                                int[] xPoints = new int[xLength];
+                                int[] yPoints = new int[yLength];
+                                for (int i = 0; i < xPointsRaw.length; i++) {
+                                    xPoints[i] = Integer.parseInt(xPointsRaw[i]);
+                                    yPoints[i] = -Integer.parseInt(yPointsRaw[i]);
                                 }
+                                Polygon hitbox = new Polygon(xPoints, yPoints, xLength);
+
+                                ArrayList<Hitbox> hitboxes = attachEntity.getHitboxes();
+                                if (hitboxes == null) {
+                                    hitboxes = new ArrayList<>();
+                                    hitboxes.add(new Hitbox(hitbox));
+                                    attachEntity.setHitboxes(hitboxes);
+                                }
+                                else attachEntity.getHitboxes().add(new Hitbox(hitbox));
+                            } else {
+                                double w = Double.parseDouble(properties.getProperty("size_x", "0"));
+                                double h = Double.parseDouble(properties.getProperty("size_y", "0"));
+                                double x = Double.parseDouble(properties.getProperty("pos_x", "0")) - w / 2;
+                                double y = Double.parseDouble(properties.getProperty("pos_y", "0")) - h / 2;
+
+                                ArrayList<Hitbox> hitboxes = attachEntity.getHitboxes();
+                                if (hitboxes == null) {
+                                    hitboxes = new ArrayList<>();
+                                    hitboxes.add(new Hitbox(attachEntity.getPos().divide(2).plus(new Vec2(x, y)), new Vec2(w, h)));
+                                    attachEntity.setHitboxes(hitboxes);
+                                }
+                                else attachEntity.getHitboxes().add(new Hitbox(new Vec2(x, y).plus(attachEntity.getPos()), new Vec2(w, h)));
                             }
                         }
                     }
@@ -372,7 +397,7 @@ public class Engine extends Canvas {
             if(entity.getName() != null)
                 if(Objects.equals(entity.getName(), cameraAttach))
                     cameraEntity = entity;
-            entityList.add(0, entity);
+            entityList.addFirst(entity);
         }
         removeList.clear();
         addList.clear();

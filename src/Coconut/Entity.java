@@ -1,7 +1,7 @@
 package Coconut;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface Entity {
     void setName(String name);
@@ -12,14 +12,14 @@ public interface Entity {
     Vec2 getPos();
     void setTexture(BufferedImage texture);
     BufferedImage getTexture();
-    void setHitboxes(List<Hitbox> hitboxes);
-    List<Hitbox> getHitboxes();
+    void setHitboxes(ArrayList<Hitbox> hitboxes);
+    ArrayList<Hitbox> getHitboxes();
     void setVelocity(Vec2 velocity);
     Vec2 getVelocity();
-    List<String> getCollidesWith();
-    void setCollidesWith(List<String> collidesWith);
-    List<Entity> getLastCollision();
-    void setLastCollision(List<Entity> lastCollision);
+    ArrayList<String> getCollidesWith();
+    void setCollidesWith(ArrayList<String> collidesWith);
+    ArrayList<Entity> getLastCollision();
+    void setLastCollision(ArrayList<Entity> lastCollision);
     int getLayer();
     void setLayer(int priority);
     int getIndex();

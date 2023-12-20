@@ -3,17 +3,16 @@ package Coconut;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BasicEntity implements Entity, Serializable {
     public String name;
     public Vec2 size = new Vec2(32, 32);
     public Vec2 pos = new Vec2();
     public BufferedImage texture;
-    public List<Hitbox> hitboxes = new ArrayList<>();
+    public ArrayList<Hitbox> hitboxes = new ArrayList<>();
     public Vec2 velocity = new Vec2();
-    public List<Entity> lastCollision = new ArrayList<>();
-    public List<String> collidesWith = new ArrayList<>();
+    public ArrayList<Entity> lastCollision = new ArrayList<>();
+    public ArrayList<String> collidesWith = new ArrayList<>();
     public int layer = -1;
     public int index;
     public double mass = -1;
@@ -59,12 +58,12 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public List<Hitbox> getHitboxes() {
+    public ArrayList<Hitbox> getHitboxes() {
         return hitboxes;
     }
 
     @Override
-    public void setHitboxes(List<Hitbox> hitboxes) {
+    public void setHitboxes(ArrayList<Hitbox> hitboxes) {
         this.hitboxes = hitboxes;
     }
 
@@ -79,22 +78,22 @@ public class BasicEntity implements Entity, Serializable {
     }
 
     @Override
-    public List<Entity> getLastCollision() {
+    public ArrayList<Entity> getLastCollision() {
         return this.lastCollision;
     }
 
     @Override
-    public void setLastCollision(List<Entity> lastCollision) {
+    public void setLastCollision(ArrayList<Entity> lastCollision) {
         this.lastCollision = lastCollision;
     }
 
     @Override
-    public List<String> getCollidesWith() {
+    public ArrayList<String> getCollidesWith() {
         return this.collidesWith;
     }
 
     @Override
-    public void setCollidesWith(List<String> collidesWith) {
+    public void setCollidesWith(ArrayList<String> collidesWith) {
         this.collidesWith = collidesWith;
     }
 
@@ -134,5 +133,8 @@ public class BasicEntity implements Entity, Serializable {
     @Override
     public void render(Renderer renderer) {
         renderer.draw(this.pos, this.size, this.texture, true);
+        try {
+            renderer.draw(this.hitboxes.getFirst());
+        } catch(Exception ignored) {}
     }
 }
