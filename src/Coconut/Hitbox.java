@@ -2,21 +2,22 @@ package Coconut;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.util.Arrays;
 
 public class Hitbox {
     public final Polygon hitbox;
-    private final Vec2 pos = new Vec2();
+    private Vec2 pos = new Vec2();
 
     public Hitbox(Vec2 pos, Vec2 size) {
-        int x1 = (int) pos.x;
-        int x2 = (int) (pos.x + size.x);
-        int y1 = (int) pos.y;
-        int y2 = (int) (pos.y + size.y);
-        this.hitbox = new Polygon(new int[]{x1, x1, x2, x2}, new int[]{y1, y2, y2, y1}, 4);
+        this.hitbox = new Polygon(new int[]{0, 0, (int)size.x, (int)size.x}, new int[]{0, (int)size.y, (int)size.y, 0}, 4);
+        this.pos = pos;
     }
 
-    public Hitbox(Polygon hitbox) {
-        this.hitbox = hitbox;
+    public Hitbox(Polygon hitbox, Vec2 pos) {
+        System.out.println(Arrays.toString(hitbox.xpoints));
+        System.out.println(Arrays.toString(hitbox.ypoints));
+        System.out.println(pos);
+        this.hitbox = translate(hitbox, pos);
     }
 
     public boolean intersects(Hitbox that) {

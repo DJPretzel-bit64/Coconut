@@ -176,6 +176,8 @@ public class Engine extends Canvas {
                             if (!box) {
                                 String[] xPointsRaw = properties.getProperty("x_points").split(",");
                                 String[] yPointsRaw = properties.getProperty("y_points").split(",");
+                                double x = Double.parseDouble(properties.getProperty("pos_x", "0"));
+                                double y = Double.parseDouble(properties.getProperty("pos_y", "0"));
 
                                 int xLength = xPointsRaw.length;
                                 int yLength = yPointsRaw.length;
@@ -192,10 +194,10 @@ public class Engine extends Canvas {
                                 ArrayList<Hitbox> hitboxes = attachEntity.getHitboxes();
                                 if (hitboxes == null) {
                                     hitboxes = new ArrayList<>();
-                                    hitboxes.add(new Hitbox(hitbox));
+                                    hitboxes.add(new Hitbox(hitbox, new Vec2(x, y)));
                                     attachEntity.setHitboxes(hitboxes);
                                 }
-                                else attachEntity.getHitboxes().add(new Hitbox(hitbox));
+                                else attachEntity.getHitboxes().add(new Hitbox(hitbox, new Vec2(x, y)));
                             } else {
                                 double w = Double.parseDouble(properties.getProperty("size_x", "0"));
                                 double h = Double.parseDouble(properties.getProperty("size_y", "0"));
@@ -205,7 +207,7 @@ public class Engine extends Canvas {
                                 ArrayList<Hitbox> hitboxes = attachEntity.getHitboxes();
                                 if (hitboxes == null) {
                                     hitboxes = new ArrayList<>();
-                                    hitboxes.add(new Hitbox(attachEntity.getPos().divide(2).plus(new Vec2(x, y)), new Vec2(w, h)));
+                                    hitboxes.add(new Hitbox(attachEntity.getPos().plus(new Vec2(x, y)), new Vec2(w, h)));
                                     attachEntity.setHitboxes(hitboxes);
                                 }
                                 else attachEntity.getHitboxes().add(new Hitbox(new Vec2(x, y).plus(attachEntity.getPos()), new Vec2(w, h)));
