@@ -30,7 +30,6 @@ public record Physics(List<Entity> entities) {
                     for (Hitbox collisionHitbox : collisionEntity.getHitboxes()) {
                         if (hitbox.intersects(collisionHitbox)) {
                             if(entity.getCollidesWith().contains(collisionEntity.getName())) {
-                                collisionEntity.getVelocity().x = 0;
                                 // for all the hitboxes in each entity, check if they collide in the x and revert changes if they do
                                 if(entity.getMass() != -1 && collisionEntity.getMass() != -1) {
                                     collisionEntity.getVelocity().x = entity.getVelocity().x * entity.getMass() / collisionEntity.getMass();
@@ -80,7 +79,6 @@ public record Physics(List<Entity> entities) {
                     for (Hitbox collisionHitbox : collisionEntity.getHitboxes()) {
                         if (hitbox.intersects(collisionHitbox)) {
                             if(entity.getCollidesWith().contains(collisionEntity.getName())) {
-                                collisionEntity.getVelocity().y = 0;
                                 // for all the hitboxes in each entity, check if they collide in the x and revert changes if they do
                                 if(entity.getMass() != -1 && collisionEntity.getMass() != -1) {
                                     collisionEntity.getVelocity().y = entity.getVelocity().y * entity.getMass() / collisionEntity.getMass();

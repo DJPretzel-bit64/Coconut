@@ -2,34 +2,50 @@ package Coconut;
 
 import java.awt.*;
 import java.awt.geom.Area;
-import java.util.Arrays;
 
 public class Hitbox {
     public final Polygon hitbox;
-    private Vec2 pos = new Vec2();
+    private Vec2 pos, size;
+    private final boolean box;
 
     public Hitbox(Vec2 pos, Vec2 size) {
+        this.box = true;
         this.hitbox = new Polygon(new int[]{0, 0, (int)size.x, (int)size.x}, new int[]{0, (int)size.y, (int)size.y, 0}, 4);
         this.pos = pos;
+        this.size = size;
     }
 
     public Hitbox(Polygon hitbox, Vec2 pos) {
-        System.out.println(Arrays.toString(hitbox.xpoints));
-        System.out.println(Arrays.toString(hitbox.ypoints));
-        System.out.println(pos);
+        this.box = false;
         this.hitbox = translate(hitbox, pos);
     }
 
     public boolean intersects(Hitbox that) {
         // check if this hitbox collides with another
-        Area thisBox = new Area(translate(this.hitbox, new Vec2(this.pos.x, this.pos.y)));
-        Area thatBox = new Area(translate(that.hitbox, new Vec2(that.pos.x, that.pos.y)));
-        thisBox.intersect(thatBox);
-        return !thisBox.isEmpty();
+        if(this.box && that.box) {
+            Rectangle thisBox = new Rectangle((int)this.pos.x, (int)this.pos.y, (int)this.size.x, (int)this.size.y);
+            Rectangle thatBox = new Rectangle((int)that.pos.x, (int)that.pos.y, (int)that.size.x, (int)that.size.y);
+            return thisBox.intersects(thatBox);
+        }else {
+            Rectangle thisTransBox = this.hitbox.getBounds();
+            Rectangle thatTransBox = that.hitbox.getBounds();
+            thisTransBox.translate((int)this.pos.x, (int)this.pos.y);
+            thatTransBox.translate((int)that.pos.x, (int)that.pos.y);
+            if(!thisTransBox.intersects(thatTransBox))
+                return false;
+            Area thisBox = new Area(translate(this.hitbox, new Vec2(this.pos.x, this.pos.y)));
+            Area thatBox = new Area(translate(that.hitbox, new Vec2(that.pos.x, that.pos.y)));
+            thisBox.intersect(thatBox);
+            return !thisBox.isEmpty();
+        }
     }
 
     public Vec2 getPos() {
         return this.pos;
+    }
+
+    public void setPos(Vec2 pos) {
+        this.pos = pos;
     }
 
     public static Polygon translate(Polygon p1, Vec2 delta) {

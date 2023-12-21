@@ -12,10 +12,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="Made it so that the physics engine uses polygons instead of rectangles.">
+    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="Fixed polygon hitboxes">
+      <change afterPath="$PROJECT_DIR$/.profileconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/profile.jfr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Coconut/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Coconut/BasicEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/BasicEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Coconut/Hitbox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Hitbox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Coconut/Physics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Physics.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,31 +52,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/code/Player.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.14166667&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/entities/code/Portal.java&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.Main.executor": "Java Profile Executor",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "21",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Dylan/Documents/Code/Coconut",
+    "onboarding.tips.debug.path": "C:/Users/Dylan/Documents/Code/Coconut/game/code/Player.java",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.14166667",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "two.files.diff.last.used.file": "C:/Users/Dylan/Documents/Code/Coconut/game/entities/code/Portal.java"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Dylan\Documents\Code\Coconut" />
@@ -339,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703056394780</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Fixed polygon hitboxes">
+      <option name="closed" value="true" />
+      <created>1703078167778</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1703078167778</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -355,7 +366,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added layer support" />
     <MESSAGE value="Finished cloning CoffeeQuest game!" />
     <MESSAGE value="Made the game around 6 times faster by combining world and background images into single image" />
     <MESSAGE value="commented most of the code" />
@@ -380,7 +390,8 @@
     <MESSAGE value="fixed a bug where an exception would be thrown when trying to remove an entity that doesn't have a name" />
     <MESSAGE value="fixed a few" />
     <MESSAGE value="Made it so that the physics engine uses polygons instead of rectangles." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made it so that the physics engine uses polygons instead of rectangles." />
+    <MESSAGE value="Fixed polygon hitboxes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed polygon hitboxes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

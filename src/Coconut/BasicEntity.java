@@ -133,8 +133,5 @@ public class BasicEntity implements Entity, Serializable {
     @Override
     public void render(Renderer renderer) {
         renderer.draw(this.pos, this.size, this.texture, true);
-        try {
-            renderer.draw(this.hitboxes.getFirst());
-        } catch(Exception ignored) {}
     }
 }
