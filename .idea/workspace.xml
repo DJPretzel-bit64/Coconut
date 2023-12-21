@@ -12,14 +12,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="Fixed polygon hitboxes">
-      <change afterPath="$PROJECT_DIR$/.profileconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/profile.jfr" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Coconut/BasicEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/BasicEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Coconut/Hitbox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Hitbox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Coconut/Physics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Physics.java" afterDir="false" />
-    </list>
+    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="removed some debug statements and improved physics performance with polygons" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,10 +22,24 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
@@ -55,7 +62,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Application.Main.executor": "Java Profile Executor",
+    "Application.Main.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
@@ -63,30 +70,38 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "21",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Dylan/Documents/Code/Coconut",
+    "last_opened_file_path": "D:/Documents/Code/Coconut",
     "onboarding.tips.debug.path": "C:/Users/Dylan/Documents/Code/Coconut/game/code/Player.java",
-    "project.structure.last.edited": "Artifacts",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.14166667",
     "project.structure.side.proportion": "0.2",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "inlay.hints",
     "two.files.diff.last.used.file": "C:/Users/Dylan/Documents/Code/Coconut/game/entities/code/Portal.java"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Dylan\Documents\Code\Coconut\src" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\res" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\lights" />
-      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities\res" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="Coconut" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="Coconut" />
@@ -350,7 +365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703078167778</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="removed some debug statements and improved physics performance with polygons">
+      <option name="closed" value="true" />
+      <created>1703132067907</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1703132067907</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -366,7 +389,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Finished cloning CoffeeQuest game!" />
     <MESSAGE value="Made the game around 6 times faster by combining world and background images into single image" />
     <MESSAGE value="commented most of the code" />
     <MESSAGE value="removed the unnecessary sync function which increased performance by 50%" />
@@ -391,7 +413,8 @@
     <MESSAGE value="fixed a few" />
     <MESSAGE value="Made it so that the physics engine uses polygons instead of rectangles." />
     <MESSAGE value="Fixed polygon hitboxes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed polygon hitboxes" />
+    <MESSAGE value="removed some debug statements and improved physics performance with polygons" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed some debug statements and improved physics performance with polygons" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

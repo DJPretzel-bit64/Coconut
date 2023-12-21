@@ -18,6 +18,7 @@ public class Hitbox {
     public Hitbox(Polygon hitbox, Vec2 pos) {
         this.box = false;
         this.hitbox = translate(hitbox, pos);
+        this.pos = pos;
     }
 
     public boolean intersects(Hitbox that) {

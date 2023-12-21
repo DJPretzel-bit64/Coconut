@@ -290,7 +290,7 @@ public class Engine extends Canvas {
         // get the buffer strategy and make it double buffered
         BufferStrategy bs = this.getBufferStrategy();
         if(bs == null) {
-            this.createBufferStrategy(2);
+            this.createBufferStrategy(4);
             return;
         }
 
