@@ -34,7 +34,7 @@ public class Engine extends Canvas {
     public static double scale;
     public final Input input = new Input();
     public static Vec2 cameraPos = new Vec2();
-    public static boolean lightsEnabled;
+    public static boolean lightsEnabled, physicsEnabled;
 
     public static void main(String[] args) {
         // Create a non-static instance of the Engine class
@@ -49,8 +49,8 @@ public class Engine extends Canvas {
             System.out.println("Unable to load launch.properties");
         }																												//  key				||  purpose
         scale = Double.parseDouble(properties.getProperty("scale", "1"));								//  scale			||  factor by which to scale whatever is drawn on the screen
-        width = Integer.parseInt(properties.getProperty("width", "800"));						//  width			||  starting width of the window
-        height = Integer.parseInt(properties.getProperty("height", "600"));						//  height			||  starting height of the window
+        width = Integer.parseInt(properties.getProperty("width", "800"));								//  width			||  starting width of the window
+        height = Integer.parseInt(properties.getProperty("height", "600"));								//  height			||  starting height of the window
         title = properties.getProperty("title", "A Game");												//  title			||  title of the window
         entities = properties.getProperty("entities", "/");												//  entities		||  location of the directory in which the entity .properties files are stored
         boxes = properties.getProperty("boxes", "/");													//  boxes			||	location of the directory in which the hitboxes .properties files are stored
@@ -60,6 +60,7 @@ public class Engine extends Canvas {
         numLayers = Integer.parseInt(properties.getProperty("num_layers", "10"));						//  num_layers		||	number of render layers that the renderer should render
         baseLightLevel = 255 - Integer.parseInt(properties.getProperty("light_level", "250"));			//  light_level		||	the base light level of the game on a scale of 0 - 255, only applies if lights are enabled
         lightsEnabled = Boolean.parseBoolean(properties.getProperty("lights_enabled", "true"));			//  lights_enabled	||	should the engine process lights and render them
+		physicsEnabled = Boolean.parseBoolean(properties.getProperty("physics_enabled", "true"));		//	physics_enabled	||	should the engine process collisions and check movement
 
         loadEntities();																									//	load Entities,
         loadBoxes();																									//	Hitboxes,
@@ -118,8 +119,9 @@ public class Engine extends Canvas {
                             entity.setPos(new Vec2(Double.parseDouble(													//	pos_x & pos_y	||	position where the entity will be rendered, and starting pos for child hitboxes
 									properties.getProperty("pos_x", "0")),								//					||
 									Double.parseDouble(properties.getProperty("pos_y", "0"))));			//					||
-                            entity.setSize(new Vec2(Double.parseDouble(properties.getProperty("size_x")),				//	size_x & size_y	||	size of the entity, used by the renderer to determine how big it should render the entity's texture
-									Double.parseDouble(properties.getProperty("size_y"))));								//					||
+                            entity.setSize(new Vec2(Double.parseDouble(													//					||
+									properties.getProperty("size_x", "0")),								//	size_x & size_y	||	size of the entity, used by the renderer to determine how big it should render the entity's texture
+									Double.parseDouble(properties.getProperty("size_y", "0"))));		//					||
                             String texture = properties.getProperty("texture");											//	texture			||	location of the texture that should correspond to the entity
                             if (!Objects.isNull(texture))																//					||
                                 entity.setTexture(ImageIO.read(new File(texture)));										//					||
@@ -133,6 +135,7 @@ public class Engine extends Canvas {
                             entityList.add(entity);
                         } catch (Exception e) {
                             System.out.println("Error compiling " + properties.getProperty("name") + " class");
+							e.printStackTrace();
                         }
                     }
                 }
@@ -317,7 +320,8 @@ public class Engine extends Canvas {
 
         input.update(width, height, scale);																				//	update the user input
 
-        physics.update();																								//	update the physics system
+		if(physicsEnabled)
+        	physics.update();																							//	update the physics system
 
         for (Entity entity : entityList) {																				//	update each entity
             entity.update(input, delta);
@@ -326,6 +330,8 @@ public class Engine extends Canvas {
                     if (Objects.equals(light.attach, entity.getName()))
                         light.pos = new Vec2(entity.getPos());
         }
+
+		if(input.mouse) input.mouse = false;
 
         updateEntityList();																								//	update the entity list. needs to be separate so that it doesn't break the entity loop
     }

@@ -12,7 +12,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="Added a basic dialog box system">
+    <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="Made it so that physics can be disabled">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Coconut/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Engine.java" afterDir="false" />
     </list>
@@ -44,6 +44,20 @@
       </branch-storage>
     </excluded-from-favorite>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;DJPretzel-bit64&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="78ed5228-92d2-41b3-ace6-4f585d8810c5" />
+        <option name="url" value="https://github.com/DJPretzel-bit64/Coconut.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/game/entities/code/Player.java" root0="FORCE_HIGHLIGHTING" />
@@ -86,7 +100,7 @@
     &quot;project.structure.proportion&quot;: &quot;0.14166667&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Other File Types&quot;,
     &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/entities/code/Portal.java&quot;
   }
 }</component>
@@ -113,28 +127,17 @@
       <recent name="engine" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="LevleMaker" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="game.code.LevelMaker" />
-      <module name="Coconut" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Coconut.Engine" />
       <module name="Coconut" />
-      <option name="PROGRAM_PARAMETERS" value="--enable-preview" />
+      <option name="PROGRAM_PARAMETERS" value="--enable-preview --debug" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Application.LevleMaker" />
-      <item itemvalue="Application.Main" />
-    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -392,7 +395,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703180986206</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="commented the Engine class">
+      <option name="closed" value="true" />
+      <created>1703244366664</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1703244366664</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -408,8 +419,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="commented most of the code" />
-    <MESSAGE value="removed the unnecessary sync function which increased performance by 50%" />
     <MESSAGE value="added light engine" />
     <MESSAGE value="made light engine faster" />
     <MESSAGE value="made portal hitboxes 16 px wide instead of 32" />
@@ -433,7 +442,9 @@
     <MESSAGE value="Fixed polygon hitboxes" />
     <MESSAGE value="removed some debug statements and improved physics performance with polygons" />
     <MESSAGE value="Added a basic dialog box system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a basic dialog box system" />
+    <MESSAGE value="commented the Engine class" />
+    <MESSAGE value="Made it so that physics can be disabled" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made it so that physics can be disabled" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
