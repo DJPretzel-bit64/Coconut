@@ -13,8 +13,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0c520f4-3245-4bf0-8ce6-858f2bb830bb" name="Changes" comment="Made it so that physics can be disabled">
+      <change afterPath="$PROJECT_DIR$/src/game/boxes/mainMenu.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Bean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Collective.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Door.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Enemy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/LevelMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/LostMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/MainMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Movable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/PauseMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/Portal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/WonMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/code/World.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/entities/levelMenu.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/entities/lostMenu.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/entities/mainMenu.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/entities/pauseMenu.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/entities/wonMenu.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/launch.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/beans.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/block.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/buttons.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/cover.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/crunch.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/enemy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/lostMenu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/mainMenu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/numbers.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/pauseMenu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/player.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/portal.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/progress.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/slurp.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/wonMenu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world0.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world1.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world2.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world3.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world4.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world5.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/res/world6.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Coconut/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Coconut/Engine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,25 +136,27 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Documents/Code/Coconut&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Documents/Code/Coconut/src&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/code/Player.java&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.14166667&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Other File Types&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
     &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/Dylan/Documents/Code/Coconut/game/entities/code/Portal.java&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Documents\Code\Coconut" />
+      <recent name="D:\Documents\Code\Coconut\src" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\src" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\res" />
-      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities" />
-      <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\lights" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\Code\Coconut\src" />
+      <recent name="D:\Documents\Code\Coconut\game\game" />
       <recent name="C:\Users\Dylan\Documents\Code\Coconut\game\entities" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
@@ -134,6 +178,7 @@
       <option name="MAIN_CLASS_NAME" value="Coconut.Engine" />
       <module name="Coconut" />
       <option name="PROGRAM_PARAMETERS" value="--enable-preview --debug" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -403,7 +448,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703244366664</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Made it so that physics can be disabled">
+      <option name="closed" value="true" />
+      <created>1704174148403</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1704174148403</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -445,17 +498,6 @@
     <MESSAGE value="commented the Engine class" />
     <MESSAGE value="Made it so that physics can be disabled" />
     <option name="LAST_COMMIT_MESSAGE" value="Made it so that physics can be disabled" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/game/code/Player.java</url>
-          <line>52</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Coconut$Main.ic" NAME="Main Coverage Results" MODIFIED="1701666205216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
